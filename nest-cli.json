@@ -1,8 +1,59 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": "apps/knighthell-boilerplate-nestjs/src",
   "compilerOptions": {
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/knighthell-boilerplate-nestjs/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/knighthell-boilerplate-nestjs",
+  "projects": {
+    "knighthell-boilerplate-nestjs": {
+      "type": "application",
+      "root": "apps/knighthell-boilerplate-nestjs",
+      "entryFile": "main",
+      "sourceRoot": "apps/knighthell-boilerplate-nestjs/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/knighthell-boilerplate-nestjs/tsconfig.app.json"
+      }
+    },
+    "server-user": {
+      "type": "application",
+      "root": "apps/server-user",
+      "entryFile": "main",
+      "sourceRoot": "apps/server-user/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/server-user/tsconfig.app.json"
+      }
+    },
+    "server-ecommerce": {
+      "type": "application",
+      "root": "apps/server-ecommerce",
+      "entryFile": "main",
+      "sourceRoot": "apps/server-ecommerce/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/server-ecommerce/tsconfig.app.json"
+      }
+    },
+    "server-place": {
+      "type": "application",
+      "root": "apps/server-place",
+      "entryFile": "main",
+      "sourceRoot": "apps/server-place/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/server-place/tsconfig.app.json"
+      }
+    },
+    "server-auth": {
+      "type": "application",
+      "root": "apps/server-auth",
+      "entryFile": "main",
+      "sourceRoot": "apps/server-auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/server-auth/tsconfig.app.json"
+      }
+    }
   }
 }
