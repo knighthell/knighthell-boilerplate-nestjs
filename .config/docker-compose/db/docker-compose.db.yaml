@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  server-user-edgedb:
+    container_name: server-user-edgedb
+    image: edgedb/edgedb
+    environment:
+      EDGEDB_SERVER_SECURITY: insecure_dev_mode
+    volumes:
+      - "./dbschema:/dbschema"
+    ports:
+      - "5656:5656"
+  server-place-postgres-postgis:
+    container_name: server-place-postgres-postgis
+    image: postgis/postgis:15-3.3
+    environment:
+      POSTGRES_USER: place
+      POSTGRES_PASSWORD: place1234!
+      POSTGRES_DB: place
+    ports:
+      - "5432:5432"
