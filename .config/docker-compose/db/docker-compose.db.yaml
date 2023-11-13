@@ -12,7 +12,7 @@ services:
       - "5656:5656"
   server-place-postgres-postgis:
     container_name: server-place-postgres-postgis
-    image: postgis/postgis:15-3.3
+    image: postgis/postgis:15-3.4
     environment:
       POSTGRES_USER: place
       POSTGRES_PASSWORD: place1234!
