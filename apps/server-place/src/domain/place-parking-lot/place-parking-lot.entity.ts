@@ -2,7 +2,7 @@ import {
   ParkingLotType,
   ParkingSpace,
   PlaceParkingLot,
-} from '@knighthell-boilerplate-idl/place/ts/place-parking-lot';
+} from '@knighthell-boilerplate-idl-proto/place/ts/place-parking-lot';
 
 export class PlaceParkingLotEntity implements PlaceParkingLot {
   isAvailableParking: boolean;

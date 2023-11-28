@@ -1,3 +1,3 @@
-[submodule "knighthell-boilerplate-idl"]
-	path = knighthell-boilerplate-idl
-	url = git@github.com:knighthell/knighthell-boilerplate-idl.git
+[submodule "knighthell-boilerplate-idl-proto"]
+	path = knighthell-boilerplate-idl-proto
+	url = https://github.com/knighthell/knighthell-boilerplate-idl-proto

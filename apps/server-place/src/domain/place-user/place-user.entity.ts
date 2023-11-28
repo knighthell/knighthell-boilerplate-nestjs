@@ -1,4 +1,4 @@
-import { PlaceUser } from '@knighthell-boilerplate-idl/place/ts/place-user';
+import { PlaceUser } from '@knighthell-boilerplate-idl-proto/place/ts/place-user';
 
 export class PlaceUserEntity implements PlaceUser {
   id: string;

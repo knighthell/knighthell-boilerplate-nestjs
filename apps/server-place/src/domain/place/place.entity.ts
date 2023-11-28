@@ -1,4 +1,4 @@
-import { Place } from '@knighthell-boilerplate-idl/place/ts/place';
+import { Place } from '@knighthell-boilerplate-idl-proto/place/nestjs/place';
 import { PlaceAddressEntity } from '../place-address/place-address.entity';
 import { PlaceUserEntity } from '../place-user/place-user.entity';
 import { PlaceLocationEntity } from '../place-location/place-location.entity';
