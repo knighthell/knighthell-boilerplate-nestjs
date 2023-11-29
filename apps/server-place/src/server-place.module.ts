@@ -1,10 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ServerPlaceController } from './server-place.controller';
-import { ServerPlaceService } from './server-place.service';
+import { PlaceModule } from './service/place/place.module';
 
 @Module({
-  imports: [],
-  controllers: [ServerPlaceController],
-  providers: [ServerPlaceService],
+  imports: [PlaceModule],
 })
 export class ServerPlaceModule {}
