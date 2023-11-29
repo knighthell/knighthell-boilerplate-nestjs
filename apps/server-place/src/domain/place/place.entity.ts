@@ -1,23 +1,21 @@
-import { Place } from '@knighthell-boilerplate-idl-proto/place/nestjs/place';
-import { PlaceAddressEntity } from '../place-address/place-address.entity';
-import { PlaceUserEntity } from '../place-user/place-user.entity';
-import { PlaceLocationEntity } from '../place-location/place-location.entity';
-import { PlaceParkingLotEntity } from '../place-parking-lot/place-parking-lot.entity';
+import {
+  Place,
+  PlaceAddress,
+  PlaceNameTranslation,
+} from '@knighthell-boilerplate-idl-proto/place/nestjs/place';
+import { PlaceUserEntity } from '../plalce-user/place-user.entity';
 
 export class PlaceEntity implements Place {
   id: string;
-  createdAt: Date;
-  createdBy: PlaceUserEntity;
-  updatedAt: Date;
-  updatedBy: PlaceUserEntity;
-  deletedAt?: Date | undefined;
-  deletedBy?: PlaceUserEntity | undefined;
-
+  latitude: number;
+  longitude: number;
+  createdBy: PlaceUserEntity | undefined;
+  createdAt: Date | undefined;
+  updatedBy: PlaceUserEntity | undefined;
+  updatedAt: Date | undefined;
+  deletedBy: PlaceUserEntity | undefined;
+  deletedAt: Date | undefined;
   name: string;
-
-  location: PlaceLocationEntity;
-
-  address?: PlaceAddressEntity | undefined;
-
-  parkingLot?: PlaceParkingLotEntity | undefined;
+  nameTranslation?: PlaceNameTranslation | undefined;
+  address?: PlaceAddress | undefined;
 }
