@@ -54,6 +54,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/server-auth/tsconfig.app.json"
       }
+    },
+    "nestjs-cluster": {
+      "type": "library",
+      "root": "libs/nestjs-cluster",
+      "entryFile": "index",
+      "sourceRoot": "libs/nestjs-cluster/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/nestjs-cluster/tsconfig.lib.json"
+      }
     }
   }
 }

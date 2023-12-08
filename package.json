@@ -78,7 +78,11 @@
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/apps/"
-    ]
+      "<rootDir>/apps/",
+      "<rootDir>/libs/"
+    ],
+    "moduleNameMapper": {
+      "^@knighthell-boilerplate-nestjs/nestjs-cluster(|/.*)$": "<rootDir>/libs/nestjs-cluster/src/$1"
+    }
   }
 }

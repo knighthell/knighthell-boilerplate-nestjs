@@ -23,6 +23,12 @@
       ],
       "@knighthell-boilerplate-idl-proto/*": [
         "knighthell-boilerplate-idl-proto/domain/*"
+      ],
+      "@knighthell-boilerplate-nestjs/nestjs-cluster": [
+        "libs/nestjs-cluster/src"
+      ],
+      "@knighthell-boilerplate-nestjs/nestjs-cluster/*": [
+        "libs/nestjs-cluster/src/*"
       ]
     }
   }
