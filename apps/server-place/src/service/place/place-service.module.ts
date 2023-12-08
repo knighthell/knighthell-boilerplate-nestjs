@@ -2,6 +2,6 @@ import { Module } from '@nestjs/common';
 import { PlaceService } from './place.service';
 
 @Module({
-  providers: [PlaceService]
+  providers: [PlaceService],
 })
-export class PlaceModule {}
+export class PlaceServiceModule {}

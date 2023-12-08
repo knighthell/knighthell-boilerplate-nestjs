@@ -8,7 +8,6 @@ import {
   DeletePlaceListResponse,
   DeletePlaceRequest,
   DeletePlaceResponse,
-  PlaceServiceClient,
   QueryPlaceListByRadiusRequest,
   QueryPlaceListByRadiusResponse,
   QueryPlaceListBySquareRequest,
@@ -22,7 +21,6 @@ import {
   UpdatePlaceRequest,
   UpdatePlaceResponse,
 } from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
-import { Metadata } from '@grpc/grpc-js';
 import { Observable } from 'rxjs';
 
 @Injectable()
