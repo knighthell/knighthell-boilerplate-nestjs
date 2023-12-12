@@ -1,6 +1,21 @@
 version: "3"
 
 services:
+  redis:
+    image: redis:7.2.3-alpine
+    container_name: redis
+    command: redis-server --port 6379
+    labels:
+      - "name=redis"
+      - "mode=standalone"
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli","ping" ]
+      timeout: 20s
+      retries: 10
+    networks:
+      default:
   server-user-edgedb:
     container_name: server-user-edgedb
     image: edgedb/edgedb
