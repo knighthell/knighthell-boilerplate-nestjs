@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "version": "npm pkg get version",
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
@@ -21,7 +22,10 @@
     "update": "ncu",
     "update:force": "ncu -u",
     "update:nestjs": "ncu \"/@nestjs*/\"",
-    "update:nestjs:force": "ncu \"/@nestjs*/\" -u"
+    "update:nestjs:force": "ncu \"/@nestjs*/\" -u",
+    "service:place:debug": "npm run start:debug 10001 server-place",
+    "service:place:build:container:docker": "export SERVICE_VERSION=$(npm pkg get version | tr -d '\"') && docker build -f ./apps/server-place/Dockerfile -t server-place:$(echo $SERVICE_VERSION)",
+    "service:place:build:container:podman": "export SERVICE_VERSION=$(npm pkg get version | tr -d '\"') && podman build -f ./apps/server-place/Dockerfile -t server-place:$(echo $SERVICE_VERSION)"
   },
   "dependencies": {
     "@fastify/cors": "^8.4.2",
