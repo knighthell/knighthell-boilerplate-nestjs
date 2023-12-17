@@ -2,6 +2,9 @@ import * as process from 'process';
 
 export default () => ({
   env: process.env.NODE_ENV || 'local',
+  service: {
+    version: process.env.SERVICE_VERSION || 'unknown',
+  },
   http: {
     port: process.env.SERVER_PLACE_HTTP_PORT || 3003,
   },
