@@ -4,9 +4,28 @@
 
 This project that has implemented the necessary servers in advance for quick service construction.
 
+### Goal
+
+- Monolithic Repositories(Monorepo)
+- Loose Coupled System
+- Event Driven Architecture
+- Using different databases and ORMs for each service
+- Hexagonal Architecture(TBD)
+
+### Service Common Spec
+- [Structure it using IDL](https://github.com/knighthell/knighthell-boilerplate-idl-proto)
+- NestJS using Fastify
+- Support gRPC
+- Support WS(TBD)
+- Use databases and ORMs suited to each purpose
+  - server-place : Postgres extended PostGIS, TypeORM
+  - server-user : SQLite on [litestream](https://litestream.io/) (TBD)
+    - [rqlite](https://rqlite.io/)
+    - [dqlite](https://dqlite.io/)
+
 ### Server List
 
-- server-place : 장소에 대한 정보 관리 담당
+- server-place : 장소에 대한 정보 관리 담당, [README](./apps/server-place/README.md)
 - server-auth : 인증 정보 담당(TBD)
 - server-user : 사용자 정보 담당(TBD)
 - server-ecommerce : 판매상품에 대한 상품등록, 재고관리, 구매 담당(TBD)
@@ -21,30 +40,30 @@ This project that has implemented the necessary servers in advance for quick ser
 $ npm install
 ```
 
-## Running the app
+## Running the apps
 
 ```bash
 # development
-$ npm run start
+$ npm run start [ServerName]
 
 # watch mode
-$ npm run start:dev
+$ npm run start:dev [ServerName]
 
 # production mode
-$ npm run start:prod
+$ npm run start:prod [ServerName]
 ```
 
 ## Test
 
 ```bash
 # unit tests
-$ npm run test
+$ npm run test [ServerName]
 
 # e2e tests
-$ npm run test:e2e
+$ npm run test:e2e [ServerName]
 
 # test coverage
-$ npm run test:cov
+$ npm run test:cov [ServerName]
 ```
 
 ## License

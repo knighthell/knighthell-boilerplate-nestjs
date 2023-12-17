@@ -2,7 +2,12 @@ import { NestFactory } from '@nestjs/core';
 import { ServerPlaceModule } from './server-place.module';
 import { Cluster } from '@knighthell-boilerplate-nestjs/nestjs-cluster';
 import { ConfigService } from '@nestjs/config';
-import { GrpcOptions, NatsOptions, Transport } from '@nestjs/microservices';
+import {
+  GrpcOptions,
+  KafkaOptions,
+  NatsOptions,
+  Transport,
+} from '@nestjs/microservices';
 import { PLACE_PACKAGE_NAME } from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
 import { join } from 'path';
 import { ValidationPipe } from '@nestjs/common';
@@ -10,6 +15,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -22,6 +28,7 @@ async function bootstrap() {
   });
 
   const configService = app.get<ConfigService>(ConfigService);
+  const serviceVersion = configService.get('service.version');
   const httpPort = configService.get('http.port');
   const grpcPort = configService.get('grpc.port');
   const natsHost = configService.get('nats.host');
@@ -35,13 +42,16 @@ async function bootstrap() {
         package: [PLACE_PACKAGE_NAME],
         protoPath: [
           join(
-            __dirname +
-              '../../../knighthell-boilerplate-idl-proto/place/' +
-              'place.service.proto',
+            __dirname,
+            '..',
+            '..',
+            'knighthell-boilerplate-idl-proto',
+            'place',
+            'place.service.proto',
           ),
         ],
-        maxSendMessageLength: 1024 * 1024 * 10, // 10Mb
-        maxReceiveMessageLength: 1024 * 1024 * 10, // 10Mb
+        maxSendMessageLength: 1024 * 1024 * 10, // 10Mb, Client로 Response 가능한 payload 크기
+        maxReceiveMessageLength: 1024 * 1024 * 10, // 10Mb, Client에서 보내는게 가능한 Request payload 크기
         // loader: {
         //   keepCase: true,
         //   enums: String,
@@ -62,6 +72,27 @@ async function bootstrap() {
   );
 
   app.useGlobalPipes(new ValidationPipe());
+
+  /**
+   * OpenAPI(Swagger) Document 설정
+   */
+  const config = new DocumentBuilder()
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+      },
+      'Firebase Auth Token',
+    )
+    .setTitle('Knighthell Boilerplate Place API')
+    .setDescription('Knighthell Boilerplate Place Service ')
+    .setVersion(serviceVersion)
+    .addTag('place')
+    .build();
+  const openApiDocument = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api-doc', app, openApiDocument, {
+    swaggerOptions: { displayRequestDuration: true },
+  });
 
   await app.startAllMicroservices();
   await app.listen(httpPort, '0.0.0.0');
