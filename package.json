@@ -12,7 +12,6 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --watch --debug",
-    "start:prod": "node dist/apps/knighthell-boilerplate-nestjs/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -23,9 +22,17 @@
     "update:force": "ncu -u",
     "update:nestjs": "ncu \"/@nestjs*/\"",
     "update:nestjs:force": "ncu \"/@nestjs*/\" -u",
-    "service:place:debug": "npm run start:debug 10001 server-place",
-    "service:place:build:container:docker": "export SERVICE_VERSION=$(npm pkg get version | tr -d '\"') && docker build -f ./apps/server-place/Dockerfile -t server-place:$(echo $SERVICE_VERSION)",
-    "service:place:build:container:podman": "export SERVICE_VERSION=$(npm pkg get version | tr -d '\"') && podman build -f ./apps/server-place/Dockerfile -t server-place:$(echo $SERVICE_VERSION)"
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "export:env:service-version": "export SERVICE_VERSION=$(npm run version | tr -d '\"')",
+    "server:place:start:dev": "npm run start:dev server-place",
+    "server:place:start:debug": "npm run start:debug 10001 server-place",
+    "server:place:start:prod": "node dist/apps/server-place/main",
+    "server:place:typeorm:migration:generate": "npm run typeorm migration:generate -- apps/server-place/migration/title-migration -d dist/apps/grpc-title/migration/ormconfig.ts ",
+    "server:place:docker:up": "docker-compose -f ./.config/docker-compose/db/docker-compose.db.yaml up -d server-place-postgres-postgis",
+    "server:place:docker:down": "docker-compose -f ./.config/docker-compose/db/docker-compose.db.yaml down -v server-place-postgres-postgis",
+    "server:place:build:container:docker": "npm run export:env:service-version && docker build -f ./apps/server-place/Dockerfile -t server-place:$SERVICE_VERSION",
+    "server:place:build:container:podman": "npm run export:env:service-version && podman build -f ./apps/server-place/Dockerfile -t server-place:$SERVICE_VERSION",
+    "server:place:deploy:gcp:run": "npm run service:place:build:container:docker && gcloud run deploy server:place:$SERVICE_VERSION"
   },
   "dependencies": {
     "@fastify/cors": "^8.4.2",
