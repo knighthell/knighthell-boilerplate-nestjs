@@ -30,7 +30,9 @@ services:
     image: postgis/postgis:15-3.4
     environment:
       POSTGRES_USER: place
-      POSTGRES_PASSWORD: place1234!
-      POSTGRES_DB: place
+      POSTGRES_PASSWORD: place1234!!
     ports:
       - "5432:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+    command: postgres -c wal_level=logical

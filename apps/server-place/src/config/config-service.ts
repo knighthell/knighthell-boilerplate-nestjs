@@ -4,6 +4,17 @@ export default () => ({
   env: process.env.NODE_ENV || 'local',
   service: {
     version: process.env.SERVICE_VERSION || 'unknown',
+    gcp: {
+      run: {
+        // Google Cloud Run 사용 시 자동으로 주입되는 환경변수들
+        // ref: https://cloud.google.com/run/docs/container-contract?hl=ko#env-vars
+        port: process.env.PORT || 'unknown',
+        serviceName: process.env.K_SERVICE || 'unknown',
+        serviceRevision: process.env.K_REVISION || 'unknown',
+        serviceConfigurationName: process.env.K_CONFIGURATION || 'unknown',
+      },
+    },
+    aws: {},
   },
   http: {
     port: process.env.SERVER_PLACE_HTTP_PORT || 3003,
@@ -18,14 +29,6 @@ export default () => ({
   kafka: {
     host: process.env.KAFKA_BROKER_HOST || 'localhost',
     port: process.env.KAFKA_BROKER_PORT || 9092,
-  },
-  postgres: {
-    host: process.env.PLACE_DB_POSTGRES_HOST || 'localhost',
-    port: parseInt(process.env.PLACE_DB_POSTGRES_PORT, 10) || 5433,
-    user: process.env.PLACE_DB_POSTGRES_USERNAME || 'place',
-    password: process.env.PLACE_DB_POSTGRES_PASSWORD || 'place1234!',
-    name: process.env.PLACE_DB_POSTGRES_DATABASE_NAME || 'place',
-    timezone: process.env.DB_TIMEZONE || 'Z',
   },
   redis: {
     cache: {
