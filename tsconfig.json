@@ -30,6 +30,12 @@
       ],
       "@knighthell-boilerplate-nestjs/nestjs-cluster/*": [
         "libs/nestjs-cluster/src/*"
+      ],
+      "@knighthell-boilerplate-nestjs/common": [
+        "libs/common/src"
+      ],
+      "@knighthell-boilerplate-nestjs/common/*": [
+        "libs/common/src/*"
       ]
     }
   }

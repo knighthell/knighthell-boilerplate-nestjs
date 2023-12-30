@@ -21,18 +21,25 @@ import {
   UpdatePlaceRequest,
   UpdatePlaceResponse,
 } from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
-import { Observable } from 'rxjs';
+import { from, Observable, map } from 'rxjs';
+import { Repository } from 'typeorm';
+import { PlaceEntity } from '../../domain/place/place.entity';
 
 @Injectable()
 export class PlaceService {
+  constructor(private readonly placeRepository: Repository<PlaceEntity>) {}
   createPlace(request: CreatePlaceRequest): Observable<CreatePlaceResponse> {
-    return undefined;
+    const creatablePlace = this.placeRepository.create(request);
+
+    return from(this.placeRepository.save(creatablePlace)).pipe(
+      map((place) => ({ place: place } as CreatePlaceResponse)),
+    );
   }
 
   createPlaceList(
     request: CreatePlaceListRequest,
   ): Observable<CreatePlaceListResponse> {
-    return undefined;
+    throw new UnsupportedServiceMethodException();
   }
 
   deletePlace(request: DeletePlaceRequest): Observable<DeletePlaceResponse> {
