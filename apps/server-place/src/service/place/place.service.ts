@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   CreatePlaceListRequest,
   CreatePlaceListResponse,
@@ -24,16 +24,22 @@ import {
 import { from, Observable, map } from 'rxjs';
 import { Repository } from 'typeorm';
 import { PlaceEntity } from '../../domain/place/place.entity';
+import { UnsupportedServiceMethodException } from '@knighthell-boilerplate-nestjs/common';
 
 @Injectable()
 export class PlaceService {
+  private readonly logger = new Logger(PlaceService.name);
+
   constructor(private readonly placeRepository: Repository<PlaceEntity>) {}
-  createPlace(request: CreatePlaceRequest): Observable<CreatePlaceResponse> {
+
+  async createPlace(request: CreatePlaceRequest): Promise<CreatePlaceResponse> {
     const creatablePlace = this.placeRepository.create(request);
 
-    return from(this.placeRepository.save(creatablePlace)).pipe(
-      map((place) => ({ place: place } as CreatePlaceResponse)),
-    );
+    const createdPlace = await this.placeRepository.save(creatablePlace);
+
+    return {
+      place: createdPlace,
+    };
   }
 
   createPlaceList(
@@ -42,29 +48,71 @@ export class PlaceService {
     throw new UnsupportedServiceMethodException();
   }
 
-  deletePlace(request: DeletePlaceRequest): Observable<DeletePlaceResponse> {
-    return undefined;
+  async deletePlace(request: DeletePlaceRequest): Promise<DeletePlaceResponse> {
+    const existPlace = await this.placeRepository.preload(request);
+
+    const removedPlace = await this.placeRepository.softRemove(existPlace);
+
+    return {
+      place: removedPlace,
+    };
   }
 
   deletePlaceList(
     request: DeletePlaceListRequest,
-  ): Observable<DeletePlaceListResponse> {
-    return undefined;
+  ): Promise<DeletePlaceListResponse> {
+    throw new UnsupportedServiceMethodException();
   }
 
   queryPlaceListByRadius(
     request: QueryPlaceListByRadiusRequest,
-  ): Observable<QueryPlaceListByRadiusResponse> {
+  ): Promise<QueryPlaceListByRadiusResponse> {
     return undefined;
   }
 
-  queryPlaceListBySquare(
+  async queryPlaceListBySquare(
     request: QueryPlaceListBySquareRequest,
-  ): Observable<QueryPlaceListBySquareResponse> {
-    return undefined;
+  ): Promise<QueryPlaceListBySquareResponse> {
+    const [places, count] = await this.placeRepository
+      .createQueryBuilder('place')
+      .addSelect(
+        'ROUND(ST_Distance(place."geom", ST_GeomFromGeoJSON(:userLocation), true)::NUMERIC)',
+        'distance',
+      )
+      .orderBy({
+        distance: {
+          order: 'ASC',
+          nulls: 'NULLS FIRST',
+        },
+      })
+      .where('ST_MakeEnvelope(:left, :bottom, :right, :top, 4326)', {
+        top: request.topRightLatitude,
+        right: request.topRightLongitude,
+        bottom: request.bottomLeftLatitude,
+        left: request.bottomLeftLongitude,
+      })
+      .setParameters({
+        userLocation:
+          request.userLatitude !== undefined &&
+          request.userLongitude !== undefined
+            ? JSON.stringify({
+                type: 'Point',
+                coordinates: [request.userLongitude, request.userLatitude],
+              })
+            : null,
+      })
+      .getManyAndCount()
+      .catch((error) => {
+        this.logger.error(error);
+        throw error;
+      });
+
+    return {
+      results: places,
+    };
   }
 
-  readPlace(request: ReadPlaceRequest): Observable<ReadPlaceResponse> {
+  readPlace(request: ReadPlaceRequest): Promise<ReadPlaceResponse> {
     return undefined;
   }
 
@@ -74,13 +122,13 @@ export class PlaceService {
     return undefined;
   }
 
-  updatePlace(request: UpdatePlaceRequest): Observable<UpdatePlaceResponse> {
+  updatePlace(request: UpdatePlaceRequest): Promise<UpdatePlaceResponse> {
     return undefined;
   }
 
   updatePlaceList(
     request: UpdatePlaceListRequest,
-  ): Observable<UpdatePlaceListResponse> {
+  ): Promise<UpdatePlaceListResponse> {
     return undefined;
   }
 }
