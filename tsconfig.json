@@ -42,6 +42,12 @@
       ],
       "@knighthell-boilerplate-nestjs/opentelemetry/*": [
         "libs/opentelemetry/src/*"
+      ],
+      "@knighthell-boilerplate-nestjs/pino-logger": [
+        "libs/pino-logger/src"
+      ],
+      "@knighthell-boilerplate-nestjs/pino-logger/*": [
+        "libs/pino-logger/src/*"
       ]
     }
   }

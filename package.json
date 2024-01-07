@@ -110,7 +110,8 @@
     "moduleNameMapper": {
       "^@knighthell-boilerplate-nestjs/nestjs-cluster(|/.*)$": "<rootDir>/libs/nestjs-cluster/src/$1",
       "^@knighthell-boilerplate-nestjs/common(|/.*)$": "<rootDir>/libs/common/src/$1",
-      "^@knighthell-boilerplate-nestjs/opentelemetry(|/.*)$": "<rootDir>/libs/opentelemetry/src/$1"
+      "^@knighthell-boilerplate-nestjs/opentelemetry(|/.*)$": "<rootDir>/libs/opentelemetry/src/$1",
+      "^@knighthell-boilerplate-nestjs/pino-logger(|/.*)$": "<rootDir>/libs/pino-logger/src/$1"
     }
   }
 }
