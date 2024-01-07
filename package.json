@@ -28,8 +28,8 @@
     "server:place:start:debug": "npm run start:debug 10001 server-place",
     "server:place:start:prod": "node dist/apps/server-place/main",
     "server:place:typeorm:migration:generate": "npm run typeorm migration:generate -- apps/server-place/migration/title-migration -d dist/apps/grpc-title/migration/ormconfig.ts ",
-    "server:place:docker:up": "docker-compose -f ./.config/docker-compose/db/docker-compose.db.yaml up -d server-place-postgres-postgis",
-    "server:place:docker:down": "docker-compose -f ./.config/docker-compose/db/docker-compose.db.yaml down -v server-place-postgres-postgis",
+    "server:place:docker:up": "docker-compose -f ./.config/docker-compose/db/docker-compose.db.yaml up -d server-place-postgres",
+    "server:place:docker:down": "docker-compose -f ./.config/docker-compose/db/docker-compose.db.yaml down -v server-place-postgres",
     "server:place:build:container:docker": "npm run export:env:service-version && docker build -f ./apps/server-place/Dockerfile -t server-place:$SERVICE_VERSION",
     "server:place:build:container:podman": "npm run export:env:service-version && podman build -f ./apps/server-place/Dockerfile -t server-place:$SERVICE_VERSION",
     "server:place:deploy:gcp:run": "npm run service:place:build:container:docker && gcloud run deploy server:place:$SERVICE_VERSION"
