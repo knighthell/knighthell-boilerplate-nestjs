@@ -17,6 +17,7 @@ import {
 } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { initializeJaegerOpenTelemetryNodeSDK } from '@knighthell-boilerplate-nestjs/opentelemetry';
+import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   await initializeJaegerOpenTelemetryNodeSDK('server-place');
@@ -75,6 +76,8 @@ async function bootstrap() {
   );
 
   app.useGlobalPipes(new ValidationPipe());
+
+  app.useLogger(app.get(Logger));
 
   /**
    * OpenAPI(Swagger) Document 설정
