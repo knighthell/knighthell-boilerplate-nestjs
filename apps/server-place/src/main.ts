@@ -16,8 +16,11 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { initializeJaegerOpenTelemetryNodeSDK } from '@knighthell-boilerplate-nestjs/opentelemetry';
 
 async function bootstrap() {
+  await initializeJaegerOpenTelemetryNodeSDK('server-place');
+
   const app = await NestFactory.create<NestFastifyApplication>(
     ServerPlaceModule,
     new FastifyAdapter(),
