@@ -36,6 +36,12 @@
       ],
       "@knighthell-boilerplate-nestjs/common/*": [
         "libs/common/src/*"
+      ],
+      "@knighthell-boilerplate-nestjs/opentelemetry": [
+        "libs/opentelemetry/src"
+      ],
+      "@knighthell-boilerplate-nestjs/opentelemetry/*": [
+        "libs/opentelemetry/src/*"
       ]
     }
   }
