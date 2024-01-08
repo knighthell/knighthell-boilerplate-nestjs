@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import serviceConfig from './config/config-service';
 import typeormConfig from './config/config-typeorm';
+import { LoggerModule } from 'nestjs-pino';
+import { pinoLoggerConfig } from '@knighthell-boilerplate-nestjs/pino-logger';
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import typeormConfig from './config/config-typeorm';
         configService.get('typeorm'),
       inject: [ConfigService],
     }),
+    LoggerModule.forRoot(pinoLoggerConfig),
     PlaceServiceModule,
   ],
 })

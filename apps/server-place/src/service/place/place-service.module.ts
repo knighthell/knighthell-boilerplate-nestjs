@@ -5,6 +5,6 @@ import { PlaceEntity } from '../../domain/place/place.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PlaceEntity])],
-  providers: [PlaceService],
+  // providers: [PlaceService],
 })
 export class PlaceServiceModule {}
