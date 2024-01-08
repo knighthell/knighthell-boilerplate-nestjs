@@ -4,7 +4,7 @@
 
 This project that has implemented the necessary servers in advance for quick service construction.
 
-### Goal
+## Goal
 
 - Monolithic Repositories(Monorepo)
 - Loose Coupled System
@@ -13,7 +13,7 @@ This project that has implemented the necessary servers in advance for quick ser
 - Using CNCF Product
 - ~~Hexagonal Architecture~~(TBD)
 
-### Service Common Spec
+## Service Common Spec
 - [Structure it using IDL](https://github.com/knighthell/knighthell-boilerplate-idl-proto)
 - NestJS using Fastify
 - Support gRPC
@@ -24,7 +24,39 @@ This project that has implemented the necessary servers in advance for quick ser
     - [rqlite](https://rqlite.io/)
     - [dqlite](https://dqlite.io/)
 
-### Server List
+## Service Diagram
+
+### Phase 1
+
+````mermaid
+flowchart TD
+    User[fa:fa-user User] <-->|"Req-Res, Unary(gRPC Unary),\nStream(WS, gRPC Steram)"| LB(HAProxy or GCP CLB orAWS ELB or...)
+    
+    LB --> PathForwarding{Url pattern forwarding}
+
+    PathForwarding <-->|/places/*| ServerPlace[server-place]
+    PathForwarding <-->|/users/*| ServerUser[server-user]
+    PathForwarding <-->|/auth/*| ServerAuth[server-auth]
+    PathForwarding <-->|/social/*| ServerSocial[server-social]
+    PathForwarding <-->|/ecommerce/*| ServerEcommerce[server-ecommerce]
+    PathForwarding <-->|/chat/*| ServerChat[server-chat]
+    PathForwarding <-->|/notification/*| ServerNotification[server-notification]
+
+
+    ServerPlace <-->|CRUD Events| EventBroker[Nats or\nKafka or\nPulsar or\n ...]
+    ServerUser <--> |CRUD Events| EventBroker
+    ServerAuth <--> |CRUD Events| EventBroker
+    ServerSocial <--> |CRUD Events| EventBroker
+    ServerEcommerce <--> |CRUD Events| EventBroker
+    ServerChat <--> |CRUD Events| EventBroker
+    ServerNotification <--> |CRUD Events| EventBroker
+````
+
+### Phase 2
+
+(TBD)
+
+## Server List
 
 - server-place : 장소에 대한 정보 관리 담당, [README](./apps/server-place/README.md)
 - ~~server-auth : 인증 정보 담당~~(TBD)
