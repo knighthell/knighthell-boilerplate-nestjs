@@ -21,7 +21,7 @@ import {
   UpdatePlaceRequest,
   UpdatePlaceResponse,
 } from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
-import { from, Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Repository } from 'typeorm';
 import { PlaceEntity } from '../../domain/place/place.entity';
 import { UnsupportedServiceMethodException } from '@knighthell-boilerplate-nestjs/common';
@@ -30,12 +30,10 @@ import { UnsupportedServiceMethodException } from '@knighthell-boilerplate-nestj
 export class PlaceService {
   private readonly logger = new Logger(PlaceService.name);
 
-  constructor(private readonly placeRepository: Repository<PlaceEntity>) {}
-
   async createPlace(request: CreatePlaceRequest): Promise<CreatePlaceResponse> {
-    const creatablePlace = this.placeRepository.create(request);
+    const creatablePlace = PlaceEntity.create({ ...request });
 
-    const createdPlace = await this.placeRepository.save(creatablePlace);
+    const createdPlace = await PlaceEntity.save(creatablePlace);
 
     return {
       place: createdPlace,
@@ -49,9 +47,9 @@ export class PlaceService {
   }
 
   async deletePlace(request: DeletePlaceRequest): Promise<DeletePlaceResponse> {
-    const existPlace = await this.placeRepository.preload(request);
+    const existPlace = await PlaceEntity.preload({ ...request });
 
-    const removedPlace = await this.placeRepository.softRemove(existPlace);
+    const removedPlace = await PlaceEntity.softRemove(existPlace);
 
     return {
       place: removedPlace,
@@ -73,8 +71,7 @@ export class PlaceService {
   async queryPlaceListBySquare(
     request: QueryPlaceListBySquareRequest,
   ): Promise<QueryPlaceListBySquareResponse> {
-    const [places, count] = await this.placeRepository
-      .createQueryBuilder('place')
+    const [places, count] = await PlaceEntity.createQueryBuilder('place')
       .addSelect(
         'ROUND(ST_Distance(place."geom", ST_GeomFromGeoJSON(:userLocation), true)::NUMERIC)',
         'distance',
