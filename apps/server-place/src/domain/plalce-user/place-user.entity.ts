@@ -1,7 +1,7 @@
 import { PlaceUser } from '@knighthell-boilerplate-idl-proto/place/nestjs/place-user';
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 
-@Entity('place-user')
+@Entity('PlaceUser')
 export class PlaceUserEntity implements PlaceUser {
   @PrimaryColumn('uuid')
   id: string;

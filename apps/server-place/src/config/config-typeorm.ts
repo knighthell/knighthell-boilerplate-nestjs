@@ -4,9 +4,8 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import process from 'process';
 import { PlaceEntity } from '../domain/place/place.entity';
 import { PlaceUserEntity } from '../domain/plalce-user/place-user.entity';
-import { resolve, relative } from 'path';
+import { resolve } from 'path';
 
-console.log(resolve('migrations', '*{.ts,.js}'));
 configDotenv();
 
 const typeormConfig: DataSourceOptions = {
@@ -17,7 +16,7 @@ const typeormConfig: DataSourceOptions = {
   password: process.env.PLACE_DB_POSTGRES_PASSWORD || 'place1234!!',
   database: process.env.PLACE_DB_POSTGRES_DATABASE_NAME || 'place',
   entities: [PlaceEntity, PlaceUserEntity],
-  // migrations: [resolve('migrations', '*{.ts,.js}')],
+  migrations: [resolve('apps', 'server-place', 'migration', '*{.ts,.js}')],
   synchronize: false,
 };
 

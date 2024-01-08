@@ -33,7 +33,7 @@ services:
       POSTGRES_PASSWORD: place1234!!
       POSTGRES_DB: place
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - ./pg_uuidv7/15/pg_uuidv7.so:/usr/lib/postgresql/15/lib/pg_uuidv7.so
       - ./pg_uuidv7/pg_uuidv7.control:/usr/share/postgresql/15/extension/pg_uuidv7.control

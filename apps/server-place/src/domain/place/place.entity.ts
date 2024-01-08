@@ -17,7 +17,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('place')
+@Entity('Place')
 export class PlaceEntity extends BaseEntity implements Place {
   @PrimaryColumn('uuid', {
     default: () => 'uuid_generate_v7()',

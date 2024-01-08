@@ -11,6 +11,7 @@ This project that has implemented the necessary servers in advance for quick ser
 - Event Driven Architecture
 - Using different databases and ORMs for each service
 - Using CNCF Product
+- Tracing Using OpenTelemetry(Local: Jaeger, Remote: CloudNative(AWS X-Ray, GCP Cloud Trace))
 - ~~Hexagonal Architecture~~(TBD)
 
 ## Service Common Spec
