@@ -1,4 +1,4 @@
-import { Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import {
   CreatePlaceListRequest,
   CreatePlaceListResponse,
@@ -23,11 +23,14 @@ import {
   UpdatePlaceResponse,
 } from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
 import { UnsupportedServiceMethodException } from '@knighthell-boilerplate-nestjs/common';
+import { CreatePlaceRequestDto } from '../../dto/place/create-place-request.dto';
 
 @Controller()
 export class PlaceHttpController implements PlaceServiceController {
   @Post('places')
-  createPlace(request: CreatePlaceRequest): Promise<CreatePlaceResponse> {
+  createPlace(
+    @Body() request: CreatePlaceRequestDto,
+  ): Promise<CreatePlaceResponse> {
     return undefined;
   }
 

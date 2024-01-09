@@ -6,8 +6,8 @@ import serviceConfig from './config/config-service';
 import typeormConfig from './config/config-typeorm';
 import { LoggerModule } from 'nestjs-pino';
 import { pinoLoggerConfig } from '@knighthell-boilerplate-nestjs/pino-logger';
-import { PlaceHttpController } from './port-in/place-http/place-http.controller';
-import { PlaceGrpcController } from './port-in/place-grpc/place-grpc.controller';
+import { PlaceHttpController } from './port-in/http/place/place-http.controller';
+import { PlaceGrpcController } from './port-in/grpc/place/place-grpc.controller';
 
 @Module({
   imports: [
