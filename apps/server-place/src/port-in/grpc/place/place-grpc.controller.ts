@@ -1,9 +1,7 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import {
   CreatePlaceListRequest,
   CreatePlaceListResponse,
-  CreatePlaceRequest,
-  CreatePlaceResponse,
   DeletePlaceListRequest,
   DeletePlaceListResponse,
   DeletePlaceRequest,
@@ -24,16 +22,22 @@ import {
   UpdatePlaceResponse,
 } from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
 import { Metadata } from '@grpc/grpc-js';
-import { Observable } from 'rxjs';
+import { CreatePlaceRequestDto } from '../../dto/place/create-place-request.dto';
+import { CreatePlaceResponseDto } from '../../dto/place/create-place-response.dto';
+import { PlaceService } from '../../../service/place/place.service';
 
 @Controller()
 @PlaceServiceControllerMethods()
 export class PlaceGrpcController implements PlaceServiceController {
+  private readonly logger = new Logger(PlaceGrpcController.name);
+
+  constructor(private readonly placeService: PlaceService) {}
+
   createPlace(
-    request: CreatePlaceRequest,
+    request: CreatePlaceRequestDto,
     metadata: Metadata,
-  ): Promise<CreatePlaceResponse> {
-    return undefined;
+  ): Promise<CreatePlaceResponseDto> {
+    return this.placeService.createPlace(request);
   }
 
   createPlaceList(
