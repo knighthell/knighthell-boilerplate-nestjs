@@ -75,7 +75,7 @@ async function bootstrap() {
   //   { inheritAppConfig: true },
   // );
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
 
   app.useLogger(app.get(Logger));
 
