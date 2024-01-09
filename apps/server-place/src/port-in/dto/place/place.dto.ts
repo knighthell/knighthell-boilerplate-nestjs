@@ -15,10 +15,11 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Transform, TransformationType, Type } from 'class-transformer';
 import { PlaceUserDto } from '../place-user/place-user.dto';
 import { PlaceNameTranslationDto } from './place-name-translation.dto';
 import { PlaceAddressDto } from './place-address.dto';
+import { wrappers } from 'protobufjs';
 
 export class PlaceDto implements Place {
   @IsUUID()
@@ -54,6 +55,14 @@ export class PlaceDto implements Place {
   deletedBy?: PlaceUserDto | undefined;
 
   @IsDate()
+  // @Transform(({ type, value }) => {
+  //   switch (type) {
+  //     case TransformationType.PLAIN_TO_CLASS:
+  //       return wrappers['.google.protobuf.Timestamp'].toObject(value);
+  //     case TransformationType.CLASS_TO_PLAIN:
+  //       return wrappers['.google.protobuf.Timestamp'].fromObject(value);
+  //   }
+  // })
   deletedAt?: Date | undefined;
 
   @IsString()
