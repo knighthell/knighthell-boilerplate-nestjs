@@ -9,7 +9,7 @@ import {
   Transport,
 } from '@nestjs/microservices';
 import { PLACE_PACKAGE_NAME } from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
-import { join } from 'path';
+import { join, resolve } from 'path';
 import { ValidationPipe } from '@nestjs/common';
 import {
   FastifyAdapter,
@@ -38,32 +38,29 @@ async function bootstrap() {
   const natsHost = configService.get('nats.host');
   const natsPort = configService.get('nats.host');
 
-  // const grpcMicroservice = app.connectMicroservice<GrpcOptions>(
-  //   {
-  //     transport: Transport.GRPC,
-  //     options: {
-  //       url: `0.0.0.0:${grpcPort}`,
-  //       package: [PLACE_PACKAGE_NAME],
-  //       protoPath: [
-  //         join(
-  //           __dirname,
-  //           '..',
-  //           '..',
-  //           'knighthell-boilerplate-idl-proto',
-  //           'place',
-  //           'place.service.proto',
-  //         ),
-  //       ],
-  //       maxSendMessageLength: 1024 * 1024 * 10, // 10Mb, Client로 Response 가능한 payload 크기
-  //       maxReceiveMessageLength: 1024 * 1024 * 10, // 10Mb, Client에서 보내는게 가능한 Request payload 크기
-  //       // loader: {
-  //       //   keepCase: true,
-  //       //   enums: String,
-  //       // },
-  //     },
-  //   },
-  //   { inheritAppConfig: true },
-  // );
+  const grpcMicroservice = app.connectMicroservice<GrpcOptions>(
+    {
+      transport: Transport.GRPC,
+      options: {
+        url: `0.0.0.0:${grpcPort}`,
+        package: [PLACE_PACKAGE_NAME],
+        protoPath: [
+          resolve(
+            'knighthell-boilerplate-idl-proto',
+            'domain',
+            'place',
+            'place.service.proto',
+          ),
+        ],
+        maxSendMessageLength: 1024 * 1024 * 10, // 10Mb, Client로 Response 가능한 payload 크기
+        maxReceiveMessageLength: 1024 * 1024 * 10, // 10Mb, Client에서 보내는게 가능한 Request payload 크기
+        loader: {
+          keepCase: true,
+        },
+      },
+    },
+    { inheritAppConfig: true },
+  );
 
   // const natsMicroservice = app.connectMicroservice<NatsOptions>(
   //   {
