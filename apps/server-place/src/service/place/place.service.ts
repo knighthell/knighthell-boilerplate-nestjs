@@ -33,7 +33,13 @@ export class PlaceService {
   async createPlace(request: CreatePlaceRequest): Promise<CreatePlaceResponse> {
     const creatablePlace = PlaceEntity.create({ ...request });
 
+    creatablePlace.geom = {
+      type: 'Point',
+      coordinates: [request.longitude, request.latitude],
+    };
+
     const createdPlace = await PlaceEntity.save(creatablePlace);
+    this.logger.debug(createdPlace, 'createdPlace');
 
     return {
       place: createdPlace,
