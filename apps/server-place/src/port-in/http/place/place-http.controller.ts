@@ -1,8 +1,7 @@
-import { Body, Controller, Logger, Post } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post } from '@nestjs/common';
 import {
   CreatePlaceListRequest,
   CreatePlaceListResponse,
-  CreatePlaceRequest,
   CreatePlaceResponse,
   DeletePlaceListRequest,
   DeletePlaceListResponse,
@@ -15,8 +14,6 @@ import {
   QueryPlaceListBySquareResponse,
   ReadPlaceListRequest,
   ReadPlaceListResponse,
-  ReadPlaceRequest,
-  ReadPlaceResponse,
   UpdatePlaceListRequest,
   UpdatePlaceListResponse,
   UpdatePlaceRequest,
@@ -25,6 +22,8 @@ import {
 import { UnsupportedServiceMethodException } from '@knighthell-boilerplate-nestjs/common';
 import { CreatePlaceRequestDto } from '../../dto/place/create-place-request.dto';
 import { PlaceService } from '../../../service/place/place.service';
+import { ReadPlaceRequestDto } from '../../dto/place/read-place-request.dto';
+import { ReadPlaceResponseDto } from '../../dto/place/read-place-response.dto';
 
 @Controller()
 export class PlaceHttpController implements PlaceServiceController {
@@ -67,8 +66,11 @@ export class PlaceHttpController implements PlaceServiceController {
     return undefined;
   }
 
-  readPlace(request: ReadPlaceRequest): Promise<ReadPlaceResponse> {
-    return undefined;
+  @Get('places/:placeId')
+  readPlace(
+    @Param() request: ReadPlaceRequestDto,
+  ): Promise<ReadPlaceResponseDto> {
+    return this.placeService.readPlace(request);
   }
 
   readPlaceList(request: ReadPlaceListRequest): Promise<ReadPlaceListResponse> {

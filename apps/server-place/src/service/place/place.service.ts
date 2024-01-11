@@ -115,8 +115,15 @@ export class PlaceService {
     };
   }
 
-  readPlace(request: ReadPlaceRequest): Promise<ReadPlaceResponse> {
-    return undefined;
+  async readPlace(request: ReadPlaceRequest): Promise<ReadPlaceResponse> {
+    const place = await PlaceEntity.findOneByOrFail({ id: request.placeId });
+
+    place.latitude = place.geom.coordinates[1];
+    place.longitude = place.geom.coordinates[0];
+
+    return {
+      place,
+    };
   }
 
   readPlaceList(
