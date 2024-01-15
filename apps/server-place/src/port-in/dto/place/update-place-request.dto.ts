@@ -1,5 +1,5 @@
-import { CreatePlaceRequest } from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
-import { Place } from '@knighthell-boilerplate-idl-proto/place/nestjs/place';
+import { UpdatePlaceRequest } from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsNotEmpty,
   IsNumber,
@@ -9,12 +9,11 @@ import {
   Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
 
-export class CreatePlaceRequestDto
-  implements Omit<CreatePlaceRequest, 'placeId'>
-{
-  @ApiProperty({
+export class UpdatePlaceRequestDto implements UpdatePlaceRequest {
+  placeId: string;
+
+  @ApiPropertyOptional({
     type: String,
     example: 'MINOS Coffee cult',
     minLength: 2,
@@ -23,9 +22,9 @@ export class CreatePlaceRequestDto
   @IsNotEmpty()
   @IsString()
   @Length(2, 1000)
-  name: string;
+  name?: string | undefined;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: Number,
     example: 37.5231776,
     maximum: 90.0,
@@ -36,9 +35,9 @@ export class CreatePlaceRequestDto
   @Min(-90.0)
   @Max(90.0)
   @Type(() => Number)
-  latitude: number;
+  latitude?: number | undefined;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: Number,
     example: 127.0226903,
     maximum: 180.0,
@@ -49,5 +48,5 @@ export class CreatePlaceRequestDto
   @Min(-180.0)
   @Max(180.0)
   @Type(() => Number)
-  longitude: number;
+  longitude?: number | undefined;
 }

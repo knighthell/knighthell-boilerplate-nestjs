@@ -6,33 +6,31 @@ import {
   Logger,
   Param,
   Post,
+  Put,
 } from '@nestjs/common';
 import {
   CreatePlaceListRequest,
   CreatePlaceListResponse,
-  CreatePlaceResponse,
   DeletePlaceListRequest,
   DeletePlaceListResponse,
-  DeletePlaceRequest,
-  DeletePlaceResponse,
   PlaceServiceController,
   QueryPlaceListByRadiusRequest,
-  QueryPlaceListByRadiusResponse,
   QueryPlaceListBySquareRequest,
-  QueryPlaceListBySquareResponse,
+  QueryPlaceListResponse,
   ReadPlaceListRequest,
   ReadPlaceListResponse,
   UpdatePlaceListRequest,
   UpdatePlaceListResponse,
-  UpdatePlaceRequest,
-  UpdatePlaceResponse,
 } from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
-import { UnsupportedServiceMethodException } from '@knighthell-boilerplate-nestjs/common';
 import { CreatePlaceRequestDto } from '../../dto/place/create-place-request.dto';
 import { PlaceService } from '../../../service/place/place.service';
 import { ReadPlaceRequestDto } from '../../dto/place/read-place-request.dto';
 import { ReadPlaceResponseDto } from '../../dto/place/read-place-response.dto';
 import { DeletePlaceRequestDto } from '../../dto/place/delete-place-request.dto';
+import { CreatePlaceResponseDto } from '../../dto/place/create-place-response.dto';
+import { DeletePlaceResponseDto } from '../../dto/place/delete-place-response.dto';
+import { UpdatePlaceRequestDto } from '../../dto/place/update-place-request.dto';
+import { UpdatePlaceResponseDto } from '../../dto/place/update-place-response.dto';
 
 @Controller()
 export class PlaceHttpController implements PlaceServiceController {
@@ -43,7 +41,7 @@ export class PlaceHttpController implements PlaceServiceController {
   @Post('places')
   createPlace(
     @Body() request: CreatePlaceRequestDto,
-  ): Promise<CreatePlaceResponse> {
+  ): Promise<CreatePlaceResponseDto> {
     return this.placeService.createPlace(request);
   }
 
@@ -56,7 +54,7 @@ export class PlaceHttpController implements PlaceServiceController {
   @Delete('places/:placeId')
   deletePlace(
     @Param() request: DeletePlaceRequestDto,
-  ): Promise<DeletePlaceResponse> {
+  ): Promise<DeletePlaceResponseDto> {
     return this.placeService.deletePlace(request);
   }
 
@@ -68,13 +66,13 @@ export class PlaceHttpController implements PlaceServiceController {
 
   queryPlaceListByRadius(
     request: QueryPlaceListByRadiusRequest,
-  ): Promise<QueryPlaceListByRadiusResponse> {
+  ): Promise<QueryPlaceListResponse> {
     return this.placeService.queryPlaceListByRadius(request);
   }
 
   queryPlaceListBySquare(
     request: QueryPlaceListBySquareRequest,
-  ): Promise<QueryPlaceListBySquareResponse> {
+  ): Promise<QueryPlaceListResponse> {
     return this.placeService.queryPlaceListBySquare(request);
   }
 
@@ -89,7 +87,13 @@ export class PlaceHttpController implements PlaceServiceController {
     return this.placeService.readPlaceList(request);
   }
 
-  updatePlace(request: UpdatePlaceRequest): Promise<UpdatePlaceResponse> {
+  @Put('places/:placeId')
+  updatePlace(
+    @Body() request: UpdatePlaceRequestDto,
+    @Param('placeId') placeId: string,
+  ): Promise<UpdatePlaceResponseDto> {
+    request.placeId = placeId;
+
     return this.placeService.updatePlace(request);
   }
 

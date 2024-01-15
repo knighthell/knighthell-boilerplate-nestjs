@@ -9,9 +9,8 @@ import {
   DeletePlaceRequest,
   DeletePlaceResponse,
   QueryPlaceListByRadiusRequest,
-  QueryPlaceListByRadiusResponse,
   QueryPlaceListBySquareRequest,
-  QueryPlaceListBySquareResponse,
+  QueryPlaceListResponse,
   ReadPlaceListRequest,
   ReadPlaceListResponse,
   ReadPlaceRequest,
@@ -23,6 +22,12 @@ import {
 } from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
 import { PlaceEntity } from '../../domain/place/place.entity';
 import { UnsupportedServiceMethodException } from '@knighthell-boilerplate-nestjs/common';
+import { plainToInstance } from 'class-transformer';
+import { CreatePlaceResponseDto } from '../../port-in/dto/place/create-place-response.dto';
+import { DeletePlaceResponseDto } from '../../port-in/dto/place/delete-place-response.dto';
+import { UpdatePlaceResponseDto } from '../../port-in/dto/place/update-place-response.dto';
+import { ReadPlaceResponseDto } from '../../port-in/dto/place/read-place-response.dto';
+import { QueryPlaceListResponseDto } from '../../port-in/dto/place/query-place-list-response.dto';
 
 @Injectable()
 export class PlaceService {
@@ -30,6 +35,9 @@ export class PlaceService {
 
   async createPlace(request: CreatePlaceRequest): Promise<CreatePlaceResponse> {
     const creatablePlace = PlaceEntity.create({ ...request });
+
+    creatablePlace.latitude = request.latitude;
+    creatablePlace.longitude = request.longitude;
 
     creatablePlace.geom = {
       type: 'Point',
@@ -39,9 +47,9 @@ export class PlaceService {
     const createdPlace = await PlaceEntity.save(creatablePlace);
     this.logger.debug(createdPlace, 'createdPlace');
 
-    return {
+    return plainToInstance(CreatePlaceResponseDto, {
       place: createdPlace,
-    };
+    });
   }
 
   async createPlaceList(
@@ -57,9 +65,9 @@ export class PlaceService {
 
     const removedPlace = await PlaceEntity.softRemove(existPlace);
 
-    return {
+    return plainToInstance(DeletePlaceResponseDto, {
       place: removedPlace,
-    };
+    });
   }
 
   async deletePlaceList(
@@ -70,13 +78,13 @@ export class PlaceService {
 
   async queryPlaceListByRadius(
     request: QueryPlaceListByRadiusRequest,
-  ): Promise<QueryPlaceListByRadiusResponse> {
+  ): Promise<QueryPlaceListResponse> {
     return undefined;
   }
 
   async queryPlaceListBySquare(
     request: QueryPlaceListBySquareRequest,
-  ): Promise<QueryPlaceListBySquareResponse> {
+  ): Promise<QueryPlaceListResponse> {
     const [places, count] = await PlaceEntity.createQueryBuilder('place')
       .addSelect(
         'ROUND(ST_Distance(place."geom", ST_GeomFromGeoJSON(:userLocation), true)::NUMERIC)',
@@ -110,9 +118,9 @@ export class PlaceService {
         throw error;
       });
 
-    return {
+    return plainToInstance(QueryPlaceListResponseDto, {
       results: places,
-    };
+    });
   }
 
   async readPlace(request: ReadPlaceRequest): Promise<ReadPlaceResponse> {
@@ -123,9 +131,9 @@ export class PlaceService {
     place.latitude = place.geom.coordinates[1];
     place.longitude = place.geom.coordinates[0];
 
-    return {
+    return plainToInstance(ReadPlaceResponseDto, {
       place,
-    };
+    });
   }
 
   async readPlaceList(
@@ -143,7 +151,7 @@ export class PlaceService {
 
     const updatedPlace = await mergedPlace.save();
 
-    return { place: updatedPlace };
+    return plainToInstance(UpdatePlaceResponseDto, { place: updatedPlace });
   }
 
   async updatePlaceList(

@@ -15,11 +15,17 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
-import { Transform, TransformationType, Type } from 'class-transformer';
+import {
+  Exclude,
+  Transform,
+  TransformationType,
+  Type,
+} from 'class-transformer';
 import { PlaceUserDto } from '../place-user/place-user.dto';
 import { PlaceNameTranslationDto } from './place-name-translation.dto';
 import { PlaceAddressDto } from './place-address.dto';
 import { wrappers } from 'protobufjs';
+import { Point } from 'typeorm';
 
 export class PlaceDto implements Place {
   @IsUUID()
@@ -76,4 +82,7 @@ export class PlaceDto implements Place {
   @ValidateNested()
   @Type(() => PlaceAddressDto)
   address?: PlaceAddressDto | undefined;
+
+  @Exclude()
+  geom?: Point;
 }

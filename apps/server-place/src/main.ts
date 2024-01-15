@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { ServerPlaceModule } from './server-place.module';
 import { Cluster } from '@knighthell-boilerplate-nestjs/nestjs-cluster';
 import { ConfigService } from '@nestjs/config';
@@ -10,7 +10,7 @@ import {
 } from '@nestjs/microservices';
 import { PLACE_PACKAGE_NAME } from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
 import { join, resolve } from 'path';
-import { ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import {
   FastifyAdapter,
   NestFastifyApplication,
@@ -73,6 +73,8 @@ async function bootstrap() {
   // );
 
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   app.useLogger(app.get(Logger));
 
