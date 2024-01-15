@@ -23,7 +23,7 @@ export class PlaceEntity extends BaseEntity implements Place {
     default: () => 'uuid_generate_v7()',
     comment: '장소 고유 Id',
   })
-  id: string;
+  placeId: string;
 
   latitude: number;
 

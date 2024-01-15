@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Logger, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Logger,
+  Param,
+  Post,
+} from '@nestjs/common';
 import {
   CreatePlaceListRequest,
   CreatePlaceListResponse,
@@ -24,6 +32,7 @@ import { CreatePlaceRequestDto } from '../../dto/place/create-place-request.dto'
 import { PlaceService } from '../../../service/place/place.service';
 import { ReadPlaceRequestDto } from '../../dto/place/read-place-request.dto';
 import { ReadPlaceResponseDto } from '../../dto/place/read-place-response.dto';
+import { DeletePlaceRequestDto } from '../../dto/place/delete-place-request.dto';
 
 @Controller()
 export class PlaceHttpController implements PlaceServiceController {
@@ -41,29 +50,32 @@ export class PlaceHttpController implements PlaceServiceController {
   createPlaceList(
     request: CreatePlaceListRequest,
   ): Promise<CreatePlaceListResponse> {
-    throw new UnsupportedServiceMethodException();
+    return this.placeService.createPlaceList(request);
   }
 
-  deletePlace(request: DeletePlaceRequest): Promise<DeletePlaceResponse> {
-    return undefined;
+  @Delete('places/:placeId')
+  deletePlace(
+    @Param() request: DeletePlaceRequestDto,
+  ): Promise<DeletePlaceResponse> {
+    return this.placeService.deletePlace(request);
   }
 
   deletePlaceList(
     request: DeletePlaceListRequest,
   ): Promise<DeletePlaceListResponse> {
-    return undefined;
+    return this.placeService.deletePlaceList(request);
   }
 
   queryPlaceListByRadius(
     request: QueryPlaceListByRadiusRequest,
   ): Promise<QueryPlaceListByRadiusResponse> {
-    return undefined;
+    return this.placeService.queryPlaceListByRadius(request);
   }
 
   queryPlaceListBySquare(
     request: QueryPlaceListBySquareRequest,
   ): Promise<QueryPlaceListBySquareResponse> {
-    return undefined;
+    return this.placeService.queryPlaceListBySquare(request);
   }
 
   @Get('places/:placeId')
@@ -74,16 +86,16 @@ export class PlaceHttpController implements PlaceServiceController {
   }
 
   readPlaceList(request: ReadPlaceListRequest): Promise<ReadPlaceListResponse> {
-    return undefined;
+    return this.placeService.readPlaceList(request);
   }
 
   updatePlace(request: UpdatePlaceRequest): Promise<UpdatePlaceResponse> {
-    return undefined;
+    return this.placeService.updatePlace(request);
   }
 
   updatePlaceList(
     request: UpdatePlaceListRequest,
   ): Promise<UpdatePlaceListResponse> {
-    return undefined;
+    return this.placeService.updatePlaceList(request);
   }
 }

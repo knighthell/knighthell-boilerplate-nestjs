@@ -24,7 +24,7 @@ import { wrappers } from 'protobufjs';
 export class PlaceDto implements Place {
   @IsUUID()
   @IsString()
-  id: string;
+  placeId: string;
 
   @IsNumber()
   @Min(-90.0)

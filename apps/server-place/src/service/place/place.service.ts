@@ -21,8 +21,6 @@ import {
   UpdatePlaceRequest,
   UpdatePlaceResponse,
 } from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
-import { Observable } from 'rxjs';
-import { Repository } from 'typeorm';
 import { PlaceEntity } from '../../domain/place/place.entity';
 import { UnsupportedServiceMethodException } from '@knighthell-boilerplate-nestjs/common';
 
@@ -46,14 +44,16 @@ export class PlaceService {
     };
   }
 
-  createPlaceList(
+  async createPlaceList(
     request: CreatePlaceListRequest,
-  ): Observable<CreatePlaceListResponse> {
+  ): Promise<CreatePlaceListResponse> {
     throw new UnsupportedServiceMethodException();
   }
 
   async deletePlace(request: DeletePlaceRequest): Promise<DeletePlaceResponse> {
-    const existPlace = await PlaceEntity.preload({ ...request });
+    const existPlace = await PlaceEntity.findOneByOrFail({
+      placeId: request.placeId,
+    });
 
     const removedPlace = await PlaceEntity.softRemove(existPlace);
 
@@ -62,13 +62,13 @@ export class PlaceService {
     };
   }
 
-  deletePlaceList(
+  async deletePlaceList(
     request: DeletePlaceListRequest,
   ): Promise<DeletePlaceListResponse> {
     throw new UnsupportedServiceMethodException();
   }
 
-  queryPlaceListByRadius(
+  async queryPlaceListByRadius(
     request: QueryPlaceListByRadiusRequest,
   ): Promise<QueryPlaceListByRadiusResponse> {
     return undefined;
@@ -116,7 +116,9 @@ export class PlaceService {
   }
 
   async readPlace(request: ReadPlaceRequest): Promise<ReadPlaceResponse> {
-    const place = await PlaceEntity.findOneByOrFail({ id: request.placeId });
+    const place = await PlaceEntity.findOneByOrFail({
+      placeId: request.placeId,
+    });
 
     place.latitude = place.geom.coordinates[1];
     place.longitude = place.geom.coordinates[0];
@@ -126,19 +128,27 @@ export class PlaceService {
     };
   }
 
-  readPlaceList(
+  async readPlaceList(
     request: ReadPlaceListRequest,
-  ): Observable<ReadPlaceListResponse> {
-    return undefined;
+  ): Promise<ReadPlaceListResponse> {
+    throw new UnsupportedServiceMethodException();
   }
 
-  updatePlace(request: UpdatePlaceRequest): Promise<UpdatePlaceResponse> {
-    return undefined;
+  async updatePlace(request: UpdatePlaceRequest): Promise<UpdatePlaceResponse> {
+    const existPlace = await PlaceEntity.findOneByOrFail({
+      placeId: request.placeId,
+    });
+
+    const mergedPlace = PlaceEntity.merge(existPlace, { ...request });
+
+    const updatedPlace = await mergedPlace.save();
+
+    return { place: updatedPlace };
   }
 
-  updatePlaceList(
+  async updatePlaceList(
     request: UpdatePlaceListRequest,
   ): Promise<UpdatePlaceListResponse> {
-    return undefined;
+    throw new UnsupportedServiceMethodException();
   }
 }

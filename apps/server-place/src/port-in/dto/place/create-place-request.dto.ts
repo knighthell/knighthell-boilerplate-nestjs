@@ -11,7 +11,7 @@ import {
 import { Type } from 'class-transformer';
 
 export class CreatePlaceRequestDto
-  implements Pick<Place, keyof CreatePlaceRequest>
+  implements Omit<CreatePlaceRequest, 'placeId'>
 {
   @IsNotEmpty()
   @IsString()

@@ -51,7 +51,7 @@ export class PlaceGrpcController implements PlaceServiceController {
     request: DeletePlaceRequest,
     metadata: Metadata,
   ): Promise<DeletePlaceResponse> {
-    return undefined;
+    return this.placeService.deletePlace(request);
   }
 
   deletePlaceList(
