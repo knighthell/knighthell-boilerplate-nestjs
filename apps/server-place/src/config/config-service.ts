@@ -1,6 +1,6 @@
 import * as process from 'process';
 
-export default () => ({
+export const ServiceConfig = () => ({
   env: process.env.NODE_ENV || 'local',
   service: {
     version: process.env.SERVICE_VERSION || 'unknown',

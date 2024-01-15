@@ -22,7 +22,7 @@
     "update:force": "ncu -u",
     "update:nestjs": "ncu \"/@nestjs*/\"",
     "update:nestjs:force": "ncu \"/@nestjs*/\" -u",
-    "typeorm": "ts-node ./node_modules/typeorm/cli",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "export:env:service-version": "export SERVICE_VERSION=$(npm run version | tr -d '\"')",
     "server:place:start:dev": "npm run start:dev server-place",
     "server:place:start:debug": "npm run start:debug 10001 server-place",

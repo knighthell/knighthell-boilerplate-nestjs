@@ -16,9 +16,14 @@ const typeormConfig: DataSourceOptions = {
   password: process.env.PLACE_DB_POSTGRES_PASSWORD || 'place1234!!',
   database: process.env.PLACE_DB_POSTGRES_DATABASE_NAME || 'place',
   entities: [PlaceEntity, PlaceUserEntity],
-  migrations: [resolve('apps', 'server-place', 'migration', '*{.ts,.js}')],
   synchronize: false,
 };
 
-export default registerAs('typeorm', () => typeormConfig);
-export const connectionSourcePlacePostgres = new DataSource(typeormConfig);
+const migrationConfig: DataSourceOptions = {
+  ...typeormConfig,
+  migrations: [resolve('apps', 'server-place', 'migration', '*{.ts,.js}')],
+};
+
+export const TypeOrmConfig = registerAs('typeorm', () => typeormConfig);
+
+export default new DataSource(migrationConfig);
