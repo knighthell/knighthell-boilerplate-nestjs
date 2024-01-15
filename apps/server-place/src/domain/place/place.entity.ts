@@ -5,7 +5,10 @@ import {
 } from '@knighthell-boilerplate-idl-proto/place/nestjs/place';
 import { PlaceUserEntity } from '../plalce-user/place-user.entity';
 import {
+  AfterLoad,
   BaseEntity,
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
@@ -16,9 +19,12 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Logger } from '@nestjs/common';
 
 @Entity('Place')
 export class PlaceEntity extends BaseEntity implements Place {
+  private readonly logger = new Logger(PlaceEntity.name);
+
   @PrimaryColumn('uuid', {
     default: () => 'uuid_generate_v7()',
     comment: '장소 고유 Id',
@@ -68,4 +74,46 @@ export class PlaceEntity extends BaseEntity implements Place {
     comment: '장소가 포함된 나라의 주소 정보',
   })
   address?: PlaceAddress | undefined;
+
+  @AfterLoad()
+  geomToLatLng() {
+    this.logger.debug('Called geomToLatLng()');
+
+    this.latitude = this.geom?.coordinates[1];
+    this.longitude = this.geom?.coordinates[0];
+
+    this.logger.debug({ latitude: this.latitude, longitude: this.longitude });
+  }
+
+  @BeforeInsert()
+  latlngToGeomBeforeInsert() {
+    this.logger.debug('Called latlngToGeomBeforeInsert()');
+
+    if (this.latitude === undefined || this.longitude === undefined) {
+      this.logger.error(
+        `Latitude, Longitude 둘다 필요함(latitude: ${this.latitude}, longitude: ${this.longitude}`,
+      );
+    }
+
+    this.geom = {
+      type: 'Point',
+      coordinates: [this.longitude, this.latitude], // !!!순서 주의!!!
+    };
+  }
+
+  @BeforeUpdate()
+  latlngToGeomBeforeUpdate() {
+    this.logger.debug('Called latlngToGeomBeforeUpdate()');
+
+    if (this.latitude === undefined || this.longitude === undefined) {
+      this.logger.error(
+        `Latitude, Longitude 둘다 필요함(latitude: ${this.latitude}, longitude: ${this.longitude}`,
+      );
+    }
+
+    this.geom = {
+      type: 'Point',
+      coordinates: [this.longitude, this.latitude], // !!!순서 주의!!!
+    };
+  }
 }
