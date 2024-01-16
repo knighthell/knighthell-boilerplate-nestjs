@@ -18,9 +18,18 @@ import {
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { initializeJaegerOpenTelemetryNodeSDK } from '@knighthell-boilerplate-nestjs/opentelemetry';
 import { Logger } from 'nestjs-pino';
+import { initializeApp } from 'firebase-admin';
 
 async function bootstrap() {
   await initializeJaegerOpenTelemetryNodeSDK('server-place');
+
+  /**
+   * Firebase Admin Initialize on Google Cloud Platform
+   * If you wanna run on the other clouds(AWS, Azure, etc..),
+   * Please Check This URL:
+   * https://firebase.google.com/docs/admin/setup?hl=ko#initialize_the_sdk_in_non-google_environments
+   */
+  const firebaseApp = initializeApp();
 
   const app = await NestFactory.create<NestFastifyApplication>(
     ServerPlaceModule,
