@@ -38,7 +38,7 @@ export class PlaceGrpcController implements PlaceServiceController {
   createPlaceList(
     request: CreatePlaceListRequest,
   ): Promise<CreatePlaceListResponse> {
-    return undefined;
+    return this.placeService.createPlaceList(request);
   }
 
   deletePlace(request: DeletePlaceRequest): Promise<DeletePlaceResponse> {
@@ -48,36 +48,36 @@ export class PlaceGrpcController implements PlaceServiceController {
   deletePlaceList(
     request: DeletePlaceListRequest,
   ): Promise<DeletePlaceListResponse> {
-    return undefined;
+    return this.placeService.deletePlaceList(request);
   }
 
   queryPlaceListByRadius(
     request: QueryPlaceListByRadiusRequest,
   ): Promise<QueryPlaceListResponse> {
-    return undefined;
+    return this.placeService.queryPlaceListByRadius(request);
   }
 
   queryPlaceListBySquare(
     request: QueryPlaceListBySquareRequest,
   ): Promise<QueryPlaceListResponse> {
-    return undefined;
+    return this.placeService.queryPlaceListBySquare(request);
   }
 
   readPlace(request: ReadPlaceRequest): Promise<ReadPlaceResponse> {
-    return undefined;
+    return this.placeService.readPlace(request);
   }
 
   readPlaceList(request: ReadPlaceListRequest): Promise<ReadPlaceListResponse> {
-    return undefined;
+    return this.placeService.readPlaceList(request);
   }
 
   updatePlace(request: UpdatePlaceRequest): Promise<UpdatePlaceResponse> {
-    return undefined;
+    return this.placeService.updatePlace(request);
   }
 
   updatePlaceList(
     request: UpdatePlaceListRequest,
   ): Promise<UpdatePlaceListResponse> {
-    return undefined;
+    return this.placeService.updatePlaceList(request);
   }
 }
