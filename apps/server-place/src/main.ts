@@ -19,6 +19,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { initializeJaegerOpenTelemetryNodeSDK } from '@knighthell-boilerplate-nestjs/opentelemetry';
 import { Logger } from 'nestjs-pino';
 import { initializeApp } from 'firebase-admin';
+import { FirebaseAuthGuard } from '@knighthell-boilerplate-nestjs/common/guards';
 
 async function bootstrap() {
   await initializeJaegerOpenTelemetryNodeSDK('server-place');
@@ -81,11 +82,13 @@ async function bootstrap() {
   //   { inheritAppConfig: true },
   // );
 
-  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+  app.useLogger(app.get(Logger));
+
+  app.useGlobalGuards(new FirebaseAuthGuard(app.get(Reflector)));
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
-  app.useLogger(app.get(Logger));
+  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
 
   /**
    * OpenAPI(Swagger) Document 설정
