@@ -6,7 +6,13 @@ import { PlaceEntity } from '../domain/place/place.entity';
 import { PlaceUserEntity } from '../domain/plalce-user/place-user.entity';
 import { resolve } from 'path';
 
-configDotenv();
+// if (
+//   process.env.NODE_ENV &&
+//   ['local', 'dev', 'staging'].includes(process.env.NODE_ENV)
+// ) {
+//   configDotenv({ path: `./.env.${process.env.NODE_ENV}` });
+// }
+configDotenv({ path: './.env.local' });
 
 const typeormConfig: DataSourceOptions = {
   type: 'postgres',

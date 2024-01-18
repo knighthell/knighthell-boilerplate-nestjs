@@ -3,7 +3,13 @@ import { registerAs } from '@nestjs/config';
 import { configDotenv } from 'dotenv';
 import { Params } from 'nestjs-pino';
 
-configDotenv();
+// if (
+//   process.env.NODE_ENV &&
+//   ['local', 'dev', 'staging'].includes(process.env.NODE_ENV)
+// ) {
+//   configDotenv({ path: `./.env.${process.env.NODE_ENV}` });
+// }
+configDotenv({ path: './.env.local' });
 
 const { BASE_PATH, CLUSTER_MODE, LOG_LEVEL, NODE_ENV } = process.env;
 
