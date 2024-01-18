@@ -33,6 +33,9 @@ export const firebaseAuthGuardHttpHandler = async (
     case authenticationType === AuthenticationType.PUBLIC:
       return true;
     default:
-      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(
+        { code: HttpStatus.UNAUTHORIZED, errorCode: 'UNAUTHENTICATED' },
+        HttpStatus.UNAUTHORIZED,
+      );
   }
 };

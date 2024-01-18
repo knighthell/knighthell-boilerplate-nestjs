@@ -3,6 +3,8 @@ import { ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
 import { ExtractJwt } from 'passport-jwt';
 import { DecodedIdToken, getAuth } from 'firebase-admin/auth';
 import { Metadata } from '@grpc/grpc-js';
+import { RpcException } from '@nestjs/microservices';
+import { Status } from '@grpc/grpc-js/build/src/constants';
 
 export const firebaseAuthGuardGrpcHandler = async (
   context: ExecutionContext,
@@ -37,6 +39,9 @@ export const firebaseAuthGuardGrpcHandler = async (
     case type === AuthenticationType.PUBLIC:
       return true;
     default:
-      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+      throw new RpcException({
+        code: Status.UNAUTHENTICATED,
+        errorCode: 'UNAUTHENTICATED',
+      });
   }
 };
