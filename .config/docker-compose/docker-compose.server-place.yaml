@@ -1,0 +1,27 @@
+version: "3.9"
+
+# ServerPlace Port Range: 11000-11999
+# ServerPlace HTTP Port: 11001
+# ServerPlace gRPC Port: 11002
+# ServerPlace WS Port: 11003
+
+services:
+  server-place-postgres-postgis:
+    container_name: server-place-postgres-postgis
+    extends:
+      file: ./db/postgres/postgres-postgis-uuidv7
+      service: postgres-postgis-uuidv7
+    environment:
+      POSTGRES_USER: place
+      POSTGRES_PASSWORD: place1234!!
+      POSTGRES_DB: place
+    ports:
+      - "11101:5432"
+  server-place-redis:
+    container_name: server-place-redis
+    extends:
+      file: ./db/redis/docker-compose.redis.yaml
+      service: redis
+    ports:
+      - "11201:6379"
+

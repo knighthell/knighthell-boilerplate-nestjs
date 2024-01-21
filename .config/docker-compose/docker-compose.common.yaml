@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+
+  nats-1:
+    extends:
+      file: nats/docker-compose.nats.yaml
+      service: nats-1
+
+  nats-2:
+    extends:
+      file: nats/docker-compose.nats.yaml
+      service: nats-2
+
+  nats-3:
+    extends:
+      file: nats/docker-compose.nats.yaml
+      service: nats-3
+
+  jaeger:
+    extends:
+      file: log-trace/docker-compose.jegger.yaml
+      service: jaeger
