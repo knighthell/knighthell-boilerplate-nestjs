@@ -14,6 +14,12 @@ This project that has implemented the necessary servers in advance for quick ser
 - Tracing Using OpenTelemetry(Local: Jaeger, Remote: CloudNative(AWS X-Ray, GCP Cloud Trace))
 - ~~Hexagonal Architecture~~(TBD)
 
+## Repository
+
+```shell
+$ git pull https://github.com/knighthell/knighthell-boilerplate-nestjs --recurse-submodules
+```
+
 ## Service Common Spec
 - [Structure it using IDL](https://github.com/knighthell/knighthell-boilerplate-idl-proto)
 - NestJS using Fastify
