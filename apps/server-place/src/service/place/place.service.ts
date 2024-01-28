@@ -1,162 +1,185 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import {
-  CreatePlaceListRequest,
-  CreatePlaceListResponse,
-  CreatePlaceRequest,
-  CreatePlaceResponse,
   DeletePlaceListRequest,
   DeletePlaceListResponse,
-  DeletePlaceRequest,
-  DeletePlaceResponse,
-  QueryPlaceListByRadiusRequest,
-  QueryPlaceListBySquareRequest,
-  QueryPlaceListResponse,
-  ReadPlaceListRequest,
-  ReadPlaceListResponse,
-  ReadPlaceRequest,
-  ReadPlaceResponse,
-  UpdatePlaceListRequest,
-  UpdatePlaceListResponse,
-  UpdatePlaceRequest,
-  UpdatePlaceResponse,
 } from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
+import { In, Repository } from 'typeorm';
 import { PlaceEntity } from '../../domain/place/place.entity';
 import { UnsupportedServiceMethodException } from '@knighthell-boilerplate-nestjs/common';
+import { CreatePlaceListRequestDto } from '../../port-in/dto/place/create-place-list/create-place-list-request.dto';
+import { CreatePlaceListResponseDto } from '../../port-in/dto/place/create-place-list/create-place-list-response.dto';
+import { UpdatePlaceListRequestDto } from '../../port-in/dto/place/update-place-list/update-place-list-request.dto';
+import { UpdatePlaceListResponseDto } from '../../port-in/dto/place/update-place-list/update-place-list-response.dto';
+import { ReadPlaceListResponseDto } from '../../port-in/dto/place/read-place-list/read-place-list-response.dto';
+import { ReadPlaceListRequestDto } from '../../port-in/dto/place/read-place-list/read-place-list-request.dto';
 import { plainToInstance } from 'class-transformer';
-import { CreatePlaceResponseDto } from '../../port-in/dto/place/create-place-response.dto';
-import { DeletePlaceResponseDto } from '../../port-in/dto/place/delete-place-response.dto';
-import { UpdatePlaceResponseDto } from '../../port-in/dto/place/update-place-response.dto';
-import { ReadPlaceResponseDto } from '../../port-in/dto/place/read-place-response.dto';
-import { QueryPlaceListResponseDto } from '../../port-in/dto/place/query-place-list-response.dto';
 
 @Injectable()
 export class PlaceService {
   private readonly logger = new Logger(PlaceService.name);
 
-  async createPlace(request: CreatePlaceRequest): Promise<CreatePlaceResponse> {
-    const creatablePlace = PlaceEntity.create({ ...request });
-
-    creatablePlace.latitude = request.latitude;
-    creatablePlace.longitude = request.longitude;
-
-    creatablePlace.geom = {
-      type: 'Point',
-      coordinates: [request.longitude, request.latitude],
-    };
-
-    const createdPlace = await PlaceEntity.save(creatablePlace);
-    this.logger.debug(createdPlace, 'createdPlace');
-
-    return plainToInstance(CreatePlaceResponseDto, {
-      place: createdPlace,
-    });
-  }
+  constructor(private readonly placeRepository: Repository<PlaceEntity>) {}
 
   async createPlaceList(
-    request: CreatePlaceListRequest,
-  ): Promise<CreatePlaceListResponse> {
-    throw new UnsupportedServiceMethodException();
-  }
+    request: CreatePlaceListRequestDto,
+  ): Promise<CreatePlaceListResponseDto> {
+    const creatablePlaceEntities = request.places.map((createPlaceRequest) => {
+      const creatablePlaceEntity = this.placeRepository.create({
+        ...createPlaceRequest,
+      });
 
-  async deletePlace(request: DeletePlaceRequest): Promise<DeletePlaceResponse> {
-    const existPlace = await PlaceEntity.findOneByOrFail({
-      placeId: request.placeId,
+      creatablePlaceEntity.latitude = createPlaceRequest.latitude;
+      creatablePlaceEntity.longitude = createPlaceRequest.longitude;
+
+      creatablePlaceEntity.geom = {
+        type: 'Point',
+        coordinates: [
+          createPlaceRequest.longitude,
+          createPlaceRequest.latitude,
+        ],
+      };
+
+      return creatablePlaceEntity;
     });
+    this.logger.debug(creatablePlaceEntities, 'creatablePlaceEntities');
 
-    const removedPlace = await PlaceEntity.softRemove(existPlace);
+    const createdPlaceEntity = await this.placeRepository.save(
+      creatablePlaceEntities,
+    );
+    this.logger.debug(createdPlaceEntity, 'createdPlaceEntity');
 
-    return plainToInstance(DeletePlaceResponseDto, {
-      place: removedPlace,
-    });
+    return plainToInstance(CreatePlaceListResponseDto, {
+      results: createdPlaceEntity,
+    } as CreatePlaceListResponseDto);
   }
 
-  async deletePlaceList(
-    request: DeletePlaceListRequest,
-  ): Promise<DeletePlaceListResponse> {
-    throw new UnsupportedServiceMethodException();
-  }
+  async readPlaceList(
+    request: ReadPlaceListRequestDto,
+  ): Promise<ReadPlaceListResponseDto> {
+    const placeQueryBuilder = this.placeRepository
+      .createQueryBuilder('place')
+      .orderBy({ name: 'ASC' }); // 기본 정렬은 이름 오름차순
 
-  async queryPlaceListByRadius(
-    request: QueryPlaceListByRadiusRequest,
-  ): Promise<QueryPlaceListResponse> {
-    return undefined;
-  }
+    if (request.places.length) {
+      const requestPlaceIds = request.places.map((place) => place.placeId);
+      placeQueryBuilder.andWhere({
+        placeId: In(requestPlaceIds),
+      });
+    }
 
-  async queryPlaceListBySquare(
-    request: QueryPlaceListBySquareRequest,
-  ): Promise<QueryPlaceListResponse> {
-    const [places, count] = await PlaceEntity.createQueryBuilder('place')
-      .addSelect(
-        'ROUND(ST_Distance(place."geom", ST_GeomFromGeoJSON(:userLocation), true)::NUMERIC)',
-        'distance',
-      )
-      .orderBy({
-        distance: {
-          order: 'ASC',
-          nulls: 'NULLS FIRST',
+    if (request.isBoundSquare()) {
+      placeQueryBuilder.andWhere(
+        'place."geom" && ST_MakeEnvelope(:left, :bottom, :right, :top, 4326)',
+        {
+          top: request.boundSquare.topRight.latitude,
+          right: request.boundSquare.topRight.longitude,
+          bottom: request.boundSquare.bottomLeft.latitude,
+          left: request.boundSquare.bottomLeft.longitude,
         },
-      })
-      .where('ST_MakeEnvelope(:left, :bottom, :right, :top, 4326)', {
-        top: request.topRightLatitude,
-        right: request.topRightLongitude,
-        bottom: request.bottomLeftLatitude,
-        left: request.bottomLeftLongitude,
-      })
-      .setParameters({
-        userLocation:
-          request.userLatitude !== undefined &&
-          request.userLongitude !== undefined
-            ? JSON.stringify({
-                type: 'Point',
-                coordinates: [request.userLongitude, request.userLatitude],
-              })
-            : null,
-      })
+      );
+    }
+
+    if (request.isBoundCircle()) {
+      placeQueryBuilder.andWhere(
+        'ST_DWithin(place."geom", ST_GeomFromGeoJSON(:centerLocation), :radiusMeter)',
+        {
+          centerLocation: JSON.stringify({
+            type: 'Point',
+            coordinates: [
+              request.boundCircle.center.longitude,
+              request.boundCircle.center.latitude,
+            ],
+          }),
+        },
+      );
+    }
+
+    if (request.userLocation) {
+      placeQueryBuilder
+        .addSelect(
+          'ROUND(ST_Distance(place."geom", ST_GeomFromGeoJSON(:userLocation), true)::NUMERIC)',
+          'distance',
+        )
+        .setParameters({
+          userLocation: JSON.stringify({
+            type: 'Point',
+            coordinates: [
+              request.userLocation.longitude,
+              request.userLocation.latitude,
+            ],
+          }),
+        })
+        .orderBy({
+          distance: {
+            order: 'ASC',
+            nulls: 'NULLS FIRST',
+          },
+        });
+    }
+
+    const [existPlaceEntities, totalCount] = await placeQueryBuilder
       .getManyAndCount()
       .catch((error) => {
         this.logger.error(error);
         throw error;
       });
 
-    return plainToInstance(QueryPlaceListResponseDto, {
-      results: places,
-    });
-  }
-
-  async readPlace(request: ReadPlaceRequest): Promise<ReadPlaceResponse> {
-    const place = await PlaceEntity.findOneByOrFail({
-      placeId: request.placeId,
+    existPlaceEntities.forEach((existPlaceEntity) => {
+      existPlaceEntity.latitude = existPlaceEntity.geom.coordinates[1];
+      existPlaceEntity.longitude = existPlaceEntity.geom.coordinates[0];
     });
 
-    place.latitude = place.geom.coordinates[1];
-    place.longitude = place.geom.coordinates[0];
-
-    return plainToInstance(ReadPlaceResponseDto, {
-      place,
-    });
-  }
-
-  async readPlaceList(
-    request: ReadPlaceListRequest,
-  ): Promise<ReadPlaceListResponse> {
-    throw new UnsupportedServiceMethodException();
-  }
-
-  async updatePlace(request: UpdatePlaceRequest): Promise<UpdatePlaceResponse> {
-    const existPlace = await PlaceEntity.findOneByOrFail({
-      placeId: request.placeId,
-    });
-
-    const mergedPlace = PlaceEntity.merge(existPlace, { ...request });
-
-    const updatedPlace = await mergedPlace.save();
-
-    return plainToInstance(UpdatePlaceResponseDto, { place: updatedPlace });
+    return plainToInstance(ReadPlaceListResponseDto, {
+      responseInfo: {
+        totalCount,
+        resultCount: existPlaceEntities.length,
+      },
+      results: existPlaceEntities,
+    } as ReadPlaceListResponseDto);
   }
 
   async updatePlaceList(
-    request: UpdatePlaceListRequest,
-  ): Promise<UpdatePlaceListResponse> {
+    request: UpdatePlaceListRequestDto,
+  ): Promise<UpdatePlaceListResponseDto> {
+    const requestPlaceIds = request.places.map((place) => place.placeId);
+
+    const existPlaceEntities = await this.placeRepository.find({
+      where: { placeId: In(requestPlaceIds) },
+    });
+
+    if (request.places.length !== existPlaceEntities.length) {
+      const existPlaceEntityIds = existPlaceEntities.map(
+        (place) => place.placeId,
+      );
+      const differenceIds = new Set(
+        requestPlaceIds.filter((x) => !new Set(existPlaceEntityIds).has(x)),
+      );
+      throw new HttpException(
+        `NOT EXIST Places(ids: ${differenceIds})`,
+        HttpStatus.NO_CONTENT,
+      );
+    }
+
+    const mergedPlaceEntities = existPlaceEntities.map((eixstPlace) =>
+      this.placeRepository.merge(eixstPlace, {
+        ...request.places.find(
+          (requestPlace) => requestPlace.placeId === eixstPlace.placeId,
+        ),
+      }),
+    );
+
+    const savedPlaceEntities = await this.placeRepository.save(
+      mergedPlaceEntities,
+    );
+
+    return plainToInstance(UpdatePlaceListResponseDto, {
+      results: savedPlaceEntities,
+    } as UpdatePlaceListResponseDto);
+  }
+
+  async deletePlaceList(
+    request: DeletePlaceListRequest,
+  ): Promise<DeletePlaceListResponse> {
     throw new UnsupportedServiceMethodException();
   }
 }

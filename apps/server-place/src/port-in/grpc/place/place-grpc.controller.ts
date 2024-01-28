@@ -1,28 +1,17 @@
 import { Controller, Logger } from '@nestjs/common';
 import {
-  CreatePlaceListRequest,
-  CreatePlaceListResponse,
-  DeletePlaceListRequest,
-  DeletePlaceListResponse,
-  DeletePlaceRequest,
-  DeletePlaceResponse,
   PlaceServiceController,
   PlaceServiceControllerMethods,
-  QueryPlaceListByRadiusRequest,
-  QueryPlaceListBySquareRequest,
-  QueryPlaceListResponse,
-  ReadPlaceListRequest,
-  ReadPlaceListResponse,
-  ReadPlaceRequest,
-  ReadPlaceResponse,
-  UpdatePlaceListRequest,
-  UpdatePlaceListResponse,
-  UpdatePlaceRequest,
-  UpdatePlaceResponse,
 } from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
-import { CreatePlaceRequestDto } from '../../dto/place/create-place-request.dto';
-import { CreatePlaceResponseDto } from '../../dto/place/create-place-response.dto';
 import { PlaceService } from '../../../service/place/place.service';
+import { ReadPlaceListRequestDto } from '../../dto/place/read-place-list/read-place-list-request.dto';
+import { DeletePlaceListRequestDto } from '../../dto/place/delete-place-list/delete-place-list-request.dto';
+import { DeletePlaceListResponseDto } from '../../dto/place/delete-place-list/delete-place-list-response.dto';
+import { CreatePlaceListRequestDto } from '../../dto/place/create-place-list/create-place-list-request.dto';
+import { CreatePlaceListResponseDto } from '../../dto/place/create-place-list/create-place-list-response.dto';
+import { UpdatePlaceListRequestDto } from '../../dto/place/update-place-list/update-place-list-request.dto';
+import { UpdatePlaceListResponseDto } from '../../dto/place/update-place-list/update-place-list-response.dto';
+import { ReadPlaceListResponseDto } from '../../dto/place/read-place-list/read-place-list-response.dto';
 
 @Controller()
 @PlaceServiceControllerMethods()
@@ -31,53 +20,27 @@ export class PlaceGrpcController implements PlaceServiceController {
 
   constructor(private readonly placeService: PlaceService) {}
 
-  createPlace(request: CreatePlaceRequestDto): Promise<CreatePlaceResponseDto> {
-    return this.placeService.createPlace(request);
-  }
-
   createPlaceList(
-    request: CreatePlaceListRequest,
-  ): Promise<CreatePlaceListResponse> {
+    request: CreatePlaceListRequestDto,
+  ): Promise<CreatePlaceListResponseDto> {
     return this.placeService.createPlaceList(request);
   }
 
-  deletePlace(request: DeletePlaceRequest): Promise<DeletePlaceResponse> {
-    return this.placeService.deletePlace(request);
-  }
-
   deletePlaceList(
-    request: DeletePlaceListRequest,
-  ): Promise<DeletePlaceListResponse> {
+    request: DeletePlaceListRequestDto,
+  ): Promise<DeletePlaceListResponseDto> {
     return this.placeService.deletePlaceList(request);
   }
 
-  queryPlaceListByRadius(
-    request: QueryPlaceListByRadiusRequest,
-  ): Promise<QueryPlaceListResponse> {
-    return this.placeService.queryPlaceListByRadius(request);
-  }
-
-  queryPlaceListBySquare(
-    request: QueryPlaceListBySquareRequest,
-  ): Promise<QueryPlaceListResponse> {
-    return this.placeService.queryPlaceListBySquare(request);
-  }
-
-  readPlace(request: ReadPlaceRequest): Promise<ReadPlaceResponse> {
-    return this.placeService.readPlace(request);
-  }
-
-  readPlaceList(request: ReadPlaceListRequest): Promise<ReadPlaceListResponse> {
+  readPlaceList(
+    request: ReadPlaceListRequestDto,
+  ): Promise<ReadPlaceListResponseDto> {
     return this.placeService.readPlaceList(request);
   }
 
-  updatePlace(request: UpdatePlaceRequest): Promise<UpdatePlaceResponse> {
-    return this.placeService.updatePlace(request);
-  }
-
   updatePlaceList(
-    request: UpdatePlaceListRequest,
-  ): Promise<UpdatePlaceListResponse> {
+    request: UpdatePlaceListRequestDto,
+  ): Promise<UpdatePlaceListResponseDto> {
     return this.placeService.updatePlaceList(request);
   }
 }

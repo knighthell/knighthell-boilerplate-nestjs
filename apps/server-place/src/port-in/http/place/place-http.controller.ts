@@ -6,31 +6,18 @@ import {
   Logger,
   Param,
   Post,
-  Put,
+  Query,
 } from '@nestjs/common';
-import {
-  CreatePlaceListRequest,
-  CreatePlaceListResponse,
-  DeletePlaceListRequest,
-  DeletePlaceListResponse,
-  PlaceServiceController,
-  QueryPlaceListByRadiusRequest,
-  QueryPlaceListBySquareRequest,
-  QueryPlaceListResponse,
-  ReadPlaceListRequest,
-  ReadPlaceListResponse,
-  UpdatePlaceListRequest,
-  UpdatePlaceListResponse,
-} from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
-import { CreatePlaceRequestDto } from '../../dto/place/create-place-request.dto';
+import { PlaceServiceController } from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
 import { PlaceService } from '../../../service/place/place.service';
-import { ReadPlaceRequestDto } from '../../dto/place/read-place-request.dto';
-import { ReadPlaceResponseDto } from '../../dto/place/read-place-response.dto';
-import { DeletePlaceRequestDto } from '../../dto/place/delete-place-request.dto';
-import { CreatePlaceResponseDto } from '../../dto/place/create-place-response.dto';
-import { DeletePlaceResponseDto } from '../../dto/place/delete-place-response.dto';
-import { UpdatePlaceRequestDto } from '../../dto/place/update-place-request.dto';
-import { UpdatePlaceResponseDto } from '../../dto/place/update-place-response.dto';
+import { CreatePlaceListRequestDto } from '../../dto/place/create-place-list/create-place-list-request.dto';
+import { CreatePlaceListResponseDto } from '../../dto/place/create-place-list/create-place-list-response.dto';
+import { DeletePlaceListRequestDto } from '../../dto/place/delete-place-list/delete-place-list-request.dto';
+import { DeletePlaceListResponseDto } from '../../dto/place/delete-place-list/delete-place-list-response.dto';
+import { ReadPlaceListRequestDto } from '../../dto/place/read-place-list/read-place-list-request.dto';
+import { ReadPlaceListResponseDto } from '../../dto/place/read-place-list/read-place-list-response.dto';
+import { UpdatePlaceListRequestDto } from '../../dto/place/update-place-list/update-place-list-request.dto';
+import { UpdatePlaceListResponseDto } from '../../dto/place/update-place-list/update-place-list-response.dto';
 
 @Controller()
 export class PlaceHttpController implements PlaceServiceController {
@@ -39,67 +26,29 @@ export class PlaceHttpController implements PlaceServiceController {
   constructor(private readonly placeService: PlaceService) {}
 
   @Post('places')
-  createPlace(
-    @Body() request: CreatePlaceRequestDto,
-  ): Promise<CreatePlaceResponseDto> {
-    return this.placeService.createPlace(request);
-  }
-
   createPlaceList(
-    request: CreatePlaceListRequest,
-  ): Promise<CreatePlaceListResponse> {
+    @Body() request: CreatePlaceListRequestDto,
+  ): Promise<CreatePlaceListResponseDto> {
     return this.placeService.createPlaceList(request);
   }
 
-  @Delete('places/:placeId')
-  deletePlace(
-    @Param() request: DeletePlaceRequestDto,
-  ): Promise<DeletePlaceResponseDto> {
-    return this.placeService.deletePlace(request);
-  }
-
+  @Delete('places')
   deletePlaceList(
-    request: DeletePlaceListRequest,
-  ): Promise<DeletePlaceListResponse> {
+    @Param() request: DeletePlaceListRequestDto,
+  ): Promise<DeletePlaceListResponseDto> {
     return this.placeService.deletePlaceList(request);
   }
 
-  queryPlaceListByRadius(
-    request: QueryPlaceListByRadiusRequest,
-  ): Promise<QueryPlaceListResponse> {
-    return this.placeService.queryPlaceListByRadius(request);
-  }
-
-  queryPlaceListBySquare(
-    request: QueryPlaceListBySquareRequest,
-  ): Promise<QueryPlaceListResponse> {
-    return this.placeService.queryPlaceListBySquare(request);
-  }
-
-  @Get('places/:placeId')
-  readPlace(
-    @Param() request: ReadPlaceRequestDto,
-  ): Promise<ReadPlaceResponseDto> {
-    return this.placeService.readPlace(request);
-  }
-
-  readPlaceList(request: ReadPlaceListRequest): Promise<ReadPlaceListResponse> {
+  @Get('places')
+  readPlaceList(
+    @Query() request: ReadPlaceListRequestDto,
+  ): Promise<ReadPlaceListResponseDto> {
     return this.placeService.readPlaceList(request);
   }
 
-  @Put('places/:placeId')
-  updatePlace(
-    @Body() request: UpdatePlaceRequestDto,
-    @Param('placeId') placeId: string,
-  ): Promise<UpdatePlaceResponseDto> {
-    request.placeId = placeId;
-
-    return this.placeService.updatePlace(request);
-  }
-
   updatePlaceList(
-    request: UpdatePlaceListRequest,
-  ): Promise<UpdatePlaceListResponse> {
+    @Body() request: UpdatePlaceListRequestDto,
+  ): Promise<UpdatePlaceListResponseDto> {
     return this.placeService.updatePlaceList(request);
   }
 }

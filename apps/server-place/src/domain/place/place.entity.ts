@@ -6,7 +6,6 @@ import {
 import { PlaceUserEntity } from '../plalce-user/place-user.entity';
 import {
   AfterLoad,
-  BaseEntity,
   BeforeInsert,
   BeforeUpdate,
   Column,
@@ -74,6 +73,8 @@ export class PlaceEntity implements Place {
     comment: '장소가 포함된 나라의 주소 정보',
   })
   address?: PlaceAddress | undefined;
+
+  distanceFromUser?: number | undefined;
 
   @AfterLoad()
   geomToLatLng() {

@@ -1,5 +1,9 @@
-import { CreatePlaceRequest } from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
+import {
+  CreatePlaceListRequest,
+  CreatePlaceListRequest_Place,
+} from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
 import { Place } from '@knighthell-boilerplate-idl-proto/place/nestjs/place';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty,
   IsNumber,
@@ -9,10 +13,13 @@ import {
   Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
 
-export class CreatePlaceRequestDto
-  implements Omit<CreatePlaceRequest, 'placeId'>
+export class CreatePlaceListRequestDto implements CreatePlaceListRequest {
+  places: CreatePlaceDto[];
+}
+
+export class CreatePlaceDto
+  implements Pick<Place, keyof CreatePlaceListRequest_Place>
 {
   @ApiProperty({
     type: String,
