@@ -12,5 +12,5 @@ services:
       - ./init-extensions.sh:/docker-entrypoint-initdb.d/init-extensions.sh
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "place" ]
-    command: postgres-uuidv7 -c wal_level=logical
+    command: postgres -c wal_level=logical
     platform: linux/amd64 # arm64로 할 경우 각종 extension의 so파일 들이 동작 안할 수 있음.

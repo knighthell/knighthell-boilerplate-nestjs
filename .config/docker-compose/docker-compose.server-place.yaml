@@ -9,7 +9,7 @@ services:
   server-place-postgres-postgis:
     container_name: server-place-postgres-postgis
     extends:
-      file: ./db/postgres/postgres-postgis-uuidv7
+      file: ./db/postgres/postgres-postgis-uuidv7/docker-compose.db.yaml
       service: postgres-postgis-uuidv7
     environment:
       POSTGRES_USER: place
