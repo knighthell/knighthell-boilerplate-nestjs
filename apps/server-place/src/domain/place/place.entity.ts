@@ -22,7 +22,7 @@ import {
 import { Logger } from '@nestjs/common';
 
 @Entity('Place')
-export class PlaceEntity extends BaseEntity implements Place {
+export class PlaceEntity implements Place {
   private readonly logger = new Logger(PlaceEntity.name);
 
   @PrimaryColumn('uuid', {
