@@ -12,35 +12,69 @@ import { CreatePlaceListResponseDto } from '../../dto/place/create-place-list/cr
 import { UpdatePlaceListRequestDto } from '../../dto/place/update-place-list/update-place-list-request.dto';
 import { UpdatePlaceListResponseDto } from '../../dto/place/update-place-list/update-place-list-response.dto';
 import { ReadPlaceListResponseDto } from '../../dto/place/read-place-list/read-place-list-response.dto';
+import {
+  PlaceCreateServiceController,
+  PlaceCreateServiceControllerMethods,
+} from '@knighthell-boilerplate-idl-proto/place/nestjs/place-create.service';
+import {
+  PlaceReadServiceController,
+  PlaceReadServiceControllerMethods,
+} from '@knighthell-boilerplate-idl-proto/place/nestjs/place-read.service';
+import {
+  PlaceUpdateServiceController,
+  PlaceUpdateServiceControllerMethods,
+} from '@knighthell-boilerplate-idl-proto/place/nestjs/place-update.service';
+import {
+  PlaceDeleteServiceController,
+  PlaceDeleteServiceControllerMethods,
+} from '@knighthell-boilerplate-idl-proto/place/nestjs/place-delete.service';
+import { PlaceCreateService } from '../../../service/place/place-create/place-create.service';
+import { PlaceReadService } from '../../../service/place/place-read/place-read.service';
+import { PlaceUpdateService } from '../../../service/place/place-update/place-update.service';
+import { PlaceDeleteService } from '../../../service/place/place-delete/place-delete.service';
 
 @Controller()
-@PlaceServiceControllerMethods()
-export class PlaceGrpcController implements PlaceServiceController {
+@PlaceCreateServiceControllerMethods()
+@PlaceReadServiceControllerMethods()
+@PlaceUpdateServiceControllerMethods()
+@PlaceDeleteServiceControllerMethods()
+export class PlaceGrpcController
+  implements
+    PlaceCreateServiceController,
+    PlaceReadServiceController,
+    PlaceUpdateServiceController,
+    PlaceDeleteServiceController
+{
   private readonly logger = new Logger(PlaceGrpcController.name);
 
-  constructor(private readonly placeService: PlaceService) {}
+  constructor(
+    private readonly placeCreateService: PlaceCreateService,
+    private readonly placeReadService: PlaceReadService,
+    private readonly placeUpdateService: PlaceUpdateService,
+    private readonly placeDeleteService: PlaceDeleteService,
+  ) {}
 
   createPlaceList(
     request: CreatePlaceListRequestDto,
   ): Promise<CreatePlaceListResponseDto> {
-    return this.placeService.createPlaceList(request);
-  }
-
-  deletePlaceList(
-    request: DeletePlaceListRequestDto,
-  ): Promise<DeletePlaceListResponseDto> {
-    return this.placeService.deletePlaceList(request);
+    return this.placeCreateService.createPlaceList(request);
   }
 
   readPlaceList(
     request: ReadPlaceListRequestDto,
   ): Promise<ReadPlaceListResponseDto> {
-    return this.placeService.readPlaceList(request);
+    return this.placeReadService.readPlaceList(request);
   }
 
   updatePlaceList(
     request: UpdatePlaceListRequestDto,
   ): Promise<UpdatePlaceListResponseDto> {
-    return this.placeService.updatePlaceList(request);
+    return this.placeUpdateService.updatePlaceList(request);
+  }
+
+  deletePlaceList(
+    request: DeletePlaceListRequestDto,
+  ): Promise<DeletePlaceListResponseDto> {
+    return this.placeDeleteService.deletePlaceList(request);
   }
 }
