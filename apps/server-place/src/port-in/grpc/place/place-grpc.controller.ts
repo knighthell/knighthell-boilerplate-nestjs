@@ -1,9 +1,4 @@
 import { Controller, Logger } from '@nestjs/common';
-import {
-  PlaceServiceController,
-  PlaceServiceControllerMethods,
-} from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
-import { PlaceService } from '../../../service/place/place.service';
 import { ReadPlaceListRequestDto } from '../../dto/place/read-place-list/read-place-list-request.dto';
 import { DeletePlaceListRequestDto } from '../../dto/place/delete-place-list/delete-place-list-request.dto';
 import { DeletePlaceListResponseDto } from '../../dto/place/delete-place-list/delete-place-list-response.dto';

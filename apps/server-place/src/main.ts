@@ -2,24 +2,18 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { ServerPlaceModule } from './server-place.module';
 import { Cluster } from '@knighthell-boilerplate-nestjs/nestjs-cluster';
 import { ConfigService } from '@nestjs/config';
-import {
-  GrpcOptions,
-  KafkaOptions,
-  NatsOptions,
-  Transport,
-} from '@nestjs/microservices';
-import { PLACE_PACKAGE_NAME } from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
-import { join, resolve } from 'path';
+import { GrpcOptions, Transport } from '@nestjs/microservices';
+import { resolve } from 'path';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { initializeJaegerOpenTelemetryNodeSDK } from '@knighthell-boilerplate-nestjs/opentelemetry';
 import { Logger } from 'nestjs-pino';
 import { initializeApp } from 'firebase-admin';
 import { FirebaseAuthGuard } from '@knighthell-boilerplate-nestjs/common/guards';
+import { PLACE_SERVICE_CREATE_PACKAGE_NAME } from '@knighthell-boilerplate-idl-proto/place/nestjs/place-create.service';
+import { PLACE_SERVICE_READ_PACKAGE_NAME } from '@knighthell-boilerplate-idl-proto/place/nestjs/place-read.service';
+import { PLACE_SERVICE_UPDATE_PACKAGE_NAME } from '@knighthell-boilerplate-idl-proto/place/nestjs/place-update.service';
+import { PLACE_SERVICE_DELETE_PACKAGE_NAME } from '@knighthell-boilerplate-idl-proto/place/nestjs/place-delete.service';
 
 async function bootstrap() {
   await initializeJaegerOpenTelemetryNodeSDK('server-place');
@@ -32,11 +26,9 @@ async function bootstrap() {
    */
   const firebaseApp = initializeApp();
 
-  const app = await NestFactory.create<NestFastifyApplication>(
-    ServerPlaceModule,
-    // new FastifyAdapter(),
-  );
+  const app = await NestFactory.create(ServerPlaceModule);
 
+  app.getHttpAdapter().getInstance().set('etag', false);
   app.enableCors({
     origin: ['https://api.knighthell.dev', 'https://api.test.knighthell.dev'],
   });
@@ -53,13 +45,36 @@ async function bootstrap() {
       transport: Transport.GRPC,
       options: {
         url: `0.0.0.0:${grpcPort}`,
-        package: [PLACE_PACKAGE_NAME],
+        package: [
+          PLACE_SERVICE_CREATE_PACKAGE_NAME,
+          PLACE_SERVICE_READ_PACKAGE_NAME,
+          PLACE_SERVICE_UPDATE_PACKAGE_NAME,
+          PLACE_SERVICE_DELETE_PACKAGE_NAME,
+        ],
         protoPath: [
           resolve(
             'knighthell-boilerplate-idl-proto',
             'domain',
             'place',
-            'place.service.proto',
+            'place-create.service.proto',
+          ),
+          resolve(
+            'knighthell-boilerplate-idl-proto',
+            'domain',
+            'place',
+            'place-read.service.proto',
+          ),
+          resolve(
+            'knighthell-boilerplate-idl-proto',
+            'domain',
+            'place',
+            'place-update.service.proto',
+          ),
+          resolve(
+            'knighthell-boilerplate-idl-proto',
+            'domain',
+            'place',
+            'place-delete.service.proto',
           ),
         ],
         maxSendMessageLength: 1024 * 1024 * 10, // 10Mb, Client로 Response 가능한 payload 크기
