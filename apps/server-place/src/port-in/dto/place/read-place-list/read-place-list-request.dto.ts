@@ -1,24 +1,16 @@
-import {
-  Pagination,
-  ReadPlaceListRequest,
-  ReadPlaceListRequest_Place,
-} from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
-import {
-  Place,
-  Wgs84Coordinates,
-} from '@knighthell-boilerplate-idl-proto/place/nestjs/place';
+import { Place } from '@knighthell-boilerplate-idl-proto/place/nestjs/place';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsNotEmpty,
-  validate,
-  ValidateNested,
-  validateOrReject,
-} from 'class-validator';
+import { IsNotEmpty, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { PeriodDateTimeDto } from '../../common/period-datetime.dto';
 import { BoundSquareDto } from './bound-square.dto';
 import { BoundCircleDto } from './bound-circle.dto';
 import { Wgs84CoordinatesDto } from '../wgs84-coordinates.dto';
+import {
+  Pagination,
+  ReadPlaceListRequest,
+  ReadPlaceListRequest_Place,
+} from '@knighthell-boilerplate-idl-proto/place/nestjs/place-read.service';
 
 export class ReadPlaceListRequestDto implements ReadPlaceListRequest {
   @ApiPropertyOptional({

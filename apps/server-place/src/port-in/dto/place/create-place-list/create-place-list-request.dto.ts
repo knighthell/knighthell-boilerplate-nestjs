@@ -1,7 +1,3 @@
-import {
-  CreatePlaceListRequest,
-  CreatePlaceListRequest_Place,
-} from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
 import { Place } from '@knighthell-boilerplate-idl-proto/place/nestjs/place';
 import { ApiProperty } from '@nestjs/swagger';
 import {
@@ -13,6 +9,10 @@ import {
   Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import {
+  CreatePlaceListRequest,
+  CreatePlaceListRequest_Place,
+} from '@knighthell-boilerplate-idl-proto/place/nestjs/place-create.service';
 
 export class CreatePlaceListRequestDto implements CreatePlaceListRequest {
   places: CreatePlaceDto[];

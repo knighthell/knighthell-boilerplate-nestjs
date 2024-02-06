@@ -1,10 +1,10 @@
-import {
-  DeletePlaceListRequest,
-  DeletePlaceListRequest_Place,
-} from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
 import { IsNotEmpty, ValidateNested } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
+import {
+  DeletePlaceListRequest,
+  DeletePlaceListRequest_Place,
+} from '@knighthell-boilerplate-idl-proto/place/nestjs/place-delete.service';
 
 export class DeletePlaceListRequestDto implements DeletePlaceListRequest {
   @ApiPropertyOptional({

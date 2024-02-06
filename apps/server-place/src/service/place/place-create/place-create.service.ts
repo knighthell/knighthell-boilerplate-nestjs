@@ -35,13 +35,13 @@ export class PlaceCreateService implements PlaceCreateServiceController {
     });
     this.logger.debug(creatablePlaceEntities, 'creatablePlaceEntities');
 
-    const createdPlaceEntity = await this.placeRepository.save(
+    const createdPlaceEntities = await this.placeRepository.save(
       creatablePlaceEntities,
     );
-    this.logger.debug(createdPlaceEntity, 'createdPlaceEntity');
+    this.logger.debug(createdPlaceEntities, 'createdPlaceEntities');
 
     return plainToInstance(CreatePlaceListResponseDto, {
-      results: createdPlaceEntity,
+      results: createdPlaceEntities,
     } as CreatePlaceListResponseDto);
   }
 }

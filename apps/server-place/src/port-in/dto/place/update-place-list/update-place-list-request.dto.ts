@@ -1,7 +1,3 @@
-import {
-  UpdatePlaceListRequest,
-  UpdatePlaceListRequest_Place,
-} from '@knighthell-boilerplate-idl-proto/place/nestjs/place.service';
 import { Place } from '@knighthell-boilerplate-idl-proto/place/nestjs/place';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import {
@@ -13,6 +9,10 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import {
+  UpdatePlaceListRequest,
+  UpdatePlaceListRequest_Place,
+} from '@knighthell-boilerplate-idl-proto/place/nestjs/place-update.service';
 
 export class UpdatePlaceListRequestDto implements UpdatePlaceListRequest {
   @ValidateNested()
