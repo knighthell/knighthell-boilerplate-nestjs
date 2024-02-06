@@ -5,6 +5,7 @@ import { PlaceUpdateServiceController } from '@knighthell-boilerplate-idl-proto/
 import { UpdatePlaceListRequestDto } from '../../../port-in/dto/place/update-place-list/update-place-list-request.dto';
 import { UpdatePlaceListResponseDto } from '../../../port-in/dto/place/update-place-list/update-place-list-response.dto';
 import { plainToInstance } from 'class-transformer';
+import { checkNotExistIdsFromEntitiesOrFail } from '@knighthell-boilerplate-nestjs/common/utils';
 
 @Injectable()
 export class PlaceUpdateService implements PlaceUpdateServiceController {
@@ -21,18 +22,17 @@ export class PlaceUpdateService implements PlaceUpdateServiceController {
       where: { placeId: In(requestPlaceIds) },
     });
 
-    if (request.places.length !== existPlaceEntities.length) {
-      const existPlaceEntityIds = existPlaceEntities.map(
-        (place) => place.placeId,
-      );
-      const differenceIds = new Set(
-        requestPlaceIds.filter((x) => !new Set(existPlaceEntityIds).has(x)),
-      );
-      throw new HttpException(
-        `NOT EXIST Places(ids: ${differenceIds})`,
-        HttpStatus.NO_CONTENT,
-      );
-    }
+    checkNotExistIdsFromEntitiesOrFail(
+      requestPlaceIds,
+      existPlaceEntities,
+      'placeId',
+      (notExistIds) => {
+        throw new HttpException(
+          `NOT EXIST Places(ids: ${notExistIds})`,
+          HttpStatus.NO_CONTENT,
+        );
+      },
+    );
 
     const mergedPlaceEntities = existPlaceEntities.map((eixstPlace) =>
       this.placeRepository.merge(eixstPlace, {
