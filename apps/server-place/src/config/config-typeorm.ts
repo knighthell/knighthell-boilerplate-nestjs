@@ -17,7 +17,7 @@ configDotenv({ path: './.env.local' });
 const typeormConfig: DataSourceOptions = {
   type: 'postgres',
   host: process.env.PLACE_DB_POSTGRES_HOST || 'localhost',
-  port: parseInt(process.env.PLACE_DB_POSTGRES_PORT, 10) || 5433,
+  port: parseInt(process.env.PLACE_DB_POSTGRES_PORT, 10) || 11101,
   username: process.env.PLACE_DB_POSTGRES_USERNAME || 'place',
   password: process.env.PLACE_DB_POSTGRES_PASSWORD || 'place1234!!',
   database: process.env.PLACE_DB_POSTGRES_DATABASE_NAME || 'place',
