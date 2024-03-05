@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-place-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server-place-dev
+  template:
+    metadata:
+      labels:
+        app: server-place-dev
+    spec:
+      containers:
+        - name: server-place
+          image: server-place:0.0.1
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: grpc
+              containerPort: 50051

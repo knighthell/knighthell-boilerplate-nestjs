@@ -1,0 +1,15 @@
+- host: api.knighthell.dev
+  http:
+    paths:
+      - path: /places
+        backend:
+          serviceName: server-place-prod-service
+          servicePort: 8080
+- host: api.dev.knighthell.dev
+  http:
+    paths:
+      - path: /places
+        backend:
+          serviceName: server-place-dev-service
+          servicePort: 8080
+      - path: /places
