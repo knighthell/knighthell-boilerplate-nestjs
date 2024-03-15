@@ -2,11 +2,12 @@ import { NestFactory } from '@nestjs/core';
 import { ServerUserModule } from './server-user.module';
 import { initializeJaegerOpenTelemetryNodeSDK } from '@knighthell-boilerplate-nestjs/opentelemetry';
 import { initializeApp } from 'firebase-admin';
+import { resolve } from 'path';
 import {
   getPackageNames,
   getProtoPaths,
 } from '@knighthell-boilerplate-nestjs/common/grpc/proto-path';
-import { resolve } from 'path';
+import { Cluster } from '@knighthell-boilerplate-nestjs/nestjs-cluster';
 
 async function bootstrap() {
   await initializeJaegerOpenTelemetryNodeSDK('server-user');
@@ -33,4 +34,9 @@ async function bootstrap() {
 
   await app.listen(3000);
 }
-bootstrap();
+
+if (process.env.CLUSTER_MODE === 'true') {
+  Cluster.start(bootstrap);
+} else {
+  bootstrap();
+}
