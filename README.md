@@ -35,6 +35,8 @@ $ git pull https://github.com/knighthell/knighthell-boilerplate-nestjs --recurse
 
 ### Phase 1
 
+#### Diagram
+
 ````mermaid
 flowchart TD
     User[fa:fa-user User] <-->|"Req-Res, Unary(gRPC Unary),\nStream(WS, gRPC Steram)"| LB(HAProxy or GCP CLB orAWS ELB or...)
@@ -59,20 +61,68 @@ flowchart TD
     ServerNotification <--> |CRUD Events| EventBroker
 ````
 
-### Phase 2
+### Phase 2 (TBD)
 
-(TBD)
+````mermaid
+flowchart TD
+    User[fa:fa-user User] <-->|"Req-Res, Unary(gRPC Unary),\nStream(WS, gRPC Steram)"| LB(HAProxy or GCP CLB orAWS ELB or...)
+    
+    LB --> PathForwarding{Url pattern forwarding}
+
+    PathForwarding <-->|/places/*| ServerPlace[server-place]
+    PathForwarding <-->|/users/*| ServerUser[server-user]
+    PathForwarding <-->|/auth/*| ServerAuth[server-auth]
+    PathForwarding <-->|/social/*| ServerSocial[server-social]
+    PathForwarding <-->|/ecommerce/*| ServerEcommerce[server-ecommerce]
+    PathForwarding <-->|/chat/*| ServerChat[server-chat]
+    PathForwarding <-->|/notification/*| ServerNotification[server-notification]
+
+
+    ServerPlace <-->|CRUD Events| EventBroker[Nats or\nKafka or\nPulsar or\n ...]
+    ServerUser <--> |CRUD Events| EventBroker
+    ServerAuth <--> |CRUD Events| EventBroker
+    ServerSocial <--> |CRUD Events| EventBroker
+    ServerEcommerce <--> |CRUD Events| EventBroker
+    ServerChat <--> |CRUD Events| EventBroker
+    ServerNotification <--> |CRUD Events| EventBroker
+    
+    EventBroker <--> ConsumerPlace[consumer-place]
+    EventBroker <--> ConsumerUser[consumer-user]
+    EventBroker <--> ConsumerAuth[consumer-auth]
+    EventBroker <--> ConsumerSocial[consumer-social]
+    EventBroker <--> ConsumerEcommerce[consumer-ecommerce]
+    EventBroker <--> ConsumerChat[consumer-chat]
+    EventBroker <--> ConsumerNotification[consumer-notification]
+````
+
 
 ## Server List
 
-- server-place : 장소에 대한 정보 관리 담당, [README](./apps/server-place/README.md)
-- ~~server-auth : 인증 정보 담당~~(TBD)
-- ~~server-user : 사용자 정보 담당~~(TBD)
-- ~~server-ecommerce : 판매상품에 대한 상품등록, 재고관리, 구매 담당~~(TBD)
-- ~~server-payment : 결제 담당~~(TBD)
-- ~~server-chat : 채팅방, 채팅수발신 담당~~(TBD)
-- ~~server-social : 사용자의 피드, 사용자과 관계되어있는 다른 사용자들의 피드들을 정리 등 담당~~(TBD)
-- ~~server-notification : 푸쉬메세지 알림, 이메일 알림, 사용자별 푸쉬메세지 목록 등 알림 담당~~(TBD)
+- Place(Spatial Information) Domain
+  - server-place : Place Information Serving and Management, [README](./apps/server-place/README.md)
+  - ~~consumer-place : TBD (Operates integrated into **server-place** and separates when necessary.)~~
+- Auth Domain
+  - ~~server-auth : Auth Information Serving and Management~~(TBD)
+  - ~~consumer-auth : TBD (Operates integrated into **server-auth** and separates when necessary.)~~
+- User Domain
+  - ~~server-user : User Information Serving and Management~~(TBD)
+  - ~~consumer-user : TBD (Operates integrated into **server-user** and separates when necessary.)~~
+- E-Commerce Domain
+  - ~~server-ecommerce : E-Commerce(Product, Inventory, Order) Information Serving and Management~~(TBD)
+  - ~~consumer-ecommerce : TBD (Operates integrated into **server-ecommerce** and separates when necessary.)~~
+- Payment Domain
+  - ~~server-payment : Payment Information Serving and Management~~(TBD)
+  - ~~consumer-payment : TBD (Operates integrated into **server-payment** and separates when necessary.)~~
+- Chat Domain
+  - ~~server-chat : Chat Information Serving and Management~~(TBD)
+  - ~~consumer-chat : TBD (Operates integrated into **server-chat** and separates when necessary.)~~
+  - ~~broadcast-chat : Broadcasting Chat Content each ChatLines~~(TBD)
+- Social Domain
+  - ~~server-social : Social Information Serving and Management~~(TBD)
+  - ~~consumer-social : TBD (Operates integrated into **server-social** and separates when necessary.)~~
+- Notification Domain
+  - ~~server-notification : Notification(Push, Email) Information Serving and Management~~(TBD)
+  - ~~consumer-notification : TBD (Operates integrated into **server-notification** and separates when necessary.)~~
 
 ## Installation
 
