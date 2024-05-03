@@ -5,12 +5,16 @@ import { PlaceEntity } from '../../../domain/place/place.entity';
 import { ReadPlaceListRequestDto } from '../../../port-in/dto/place/read-place-list/read-place-list-request.dto';
 import { ReadPlaceListResponseDto } from '../../../port-in/dto/place/read-place-list/read-place-list-response.dto';
 import { plainToInstance } from 'class-transformer';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class PlaceReadService implements PlaceReadServiceController {
   private readonly logger = new Logger(PlaceReadService.name);
 
-  constructor(private readonly placeRepository: Repository<PlaceEntity>) {}
+  constructor(
+    @InjectRepository(PlaceEntity)
+    private readonly placeRepository: Repository<PlaceEntity>,
+  ) {}
 
   async readPlaceList(
     request: ReadPlaceListRequestDto,

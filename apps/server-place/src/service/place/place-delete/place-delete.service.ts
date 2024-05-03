@@ -6,12 +6,16 @@ import { DeletePlaceListRequestDto } from '../../../port-in/dto/place/delete-pla
 import { DeletePlaceListResponseDto } from '../../../port-in/dto/place/delete-place-list/delete-place-list-response.dto';
 import { plainToInstance } from 'class-transformer';
 import { checkNotExistIdsFromEntitiesOrFail } from '@knighthell-boilerplate-nestjs/common/utils';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class PlaceDeleteService implements PlaceDeleteServiceController {
   private readonly logger = new Logger(PlaceDeleteService.name);
 
-  constructor(private readonly placeRepository: Repository<PlaceEntity>) {}
+  constructor(
+    @InjectRepository(PlaceEntity)
+    private readonly placeRepository: Repository<PlaceEntity>,
+  ) {}
 
   async deletePlaceList(
     request: DeletePlaceListRequestDto,

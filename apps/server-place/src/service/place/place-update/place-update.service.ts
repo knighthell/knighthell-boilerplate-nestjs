@@ -6,12 +6,16 @@ import { UpdatePlaceListRequestDto } from '../../../port-in/dto/place/update-pla
 import { UpdatePlaceListResponseDto } from '../../../port-in/dto/place/update-place-list/update-place-list-response.dto';
 import { plainToInstance } from 'class-transformer';
 import { checkNotExistIdsFromEntitiesOrFail } from '@knighthell-boilerplate-nestjs/common/utils';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class PlaceUpdateService implements PlaceUpdateServiceController {
   private readonly logger = new Logger(PlaceUpdateService.name);
 
-  constructor(private readonly placeRepository: Repository<PlaceEntity>) {}
+  constructor(
+    @InjectRepository(PlaceEntity)
+    private readonly placeRepository: Repository<PlaceEntity>,
+  ) {}
 
   async updatePlaceList(
     request: UpdatePlaceListRequestDto,
