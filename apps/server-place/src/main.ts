@@ -64,6 +64,16 @@ async function bootstrap() {
         protoPath: [
           resolve(
             'knighthell-boilerplate-idl-proto',
+            'common',
+            'period-datetime.proto',
+          ),
+          resolve(
+            'knighthell-boilerplate-idl-proto',
+            'common',
+            'response-info.proto',
+          ),
+          resolve(
+            'knighthell-boilerplate-idl-proto',
             'domain',
             'place',
             'place-create.service.proto',
@@ -87,6 +97,7 @@ async function bootstrap() {
             'place-delete.service.proto',
           ),
         ],
+
         maxSendMessageLength: 1024 * 1024 * 10, // 10Mb, Client로 Response 가능한 payload 크기
         maxReceiveMessageLength: 1024 * 1024 * 10, // 10Mb, Client에서 보내는게 가능한 Request payload 크기
         loader: {
