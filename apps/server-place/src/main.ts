@@ -8,16 +8,12 @@ import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { initializeJaegerOpenTelemetryNodeSDK } from '@knighthell-boilerplate-nestjs/opentelemetry';
 import { Logger } from 'nestjs-pino';
-import { initializeApp } from 'firebase-admin';
 import { FirebaseAuthGuard } from '@knighthell-boilerplate-nestjs/common/guards';
 import { PLACE_SERVICE_CREATE_PACKAGE_NAME } from '@knighthell-boilerplate-idl-proto/place/nestjs/place-create.service';
 import { PLACE_SERVICE_READ_PACKAGE_NAME } from '@knighthell-boilerplate-idl-proto/place/nestjs/place-read.service';
 import { PLACE_SERVICE_UPDATE_PACKAGE_NAME } from '@knighthell-boilerplate-idl-proto/place/nestjs/place-update.service';
 import { PLACE_SERVICE_DELETE_PACKAGE_NAME } from '@knighthell-boilerplate-idl-proto/place/nestjs/place-delete.service';
-import {
-  getPackageNames,
-  getProtoPaths,
-} from '@knighthell-boilerplate-nestjs/common/grpc/proto-path';
+import { initializeApp } from 'firebase-admin/app';
 
 async function bootstrap() {
   await initializeJaegerOpenTelemetryNodeSDK('server-place');
