@@ -79,6 +79,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/pino-logger/tsconfig.lib.json"
       }
+    },
+    "server-chat": {
+      "type": "application",
+      "root": "apps/server-chat",
+      "entryFile": "main",
+      "sourceRoot": "apps/server-chat/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/server-chat/tsconfig.app.json"
+      }
     }
   }
 }
