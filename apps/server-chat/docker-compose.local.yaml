@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  server-chat:
+    # image: thomas-oliver/nestjs-dockerized
+    build:
+      dockerfile: Dockerfile
+      context: .
+      # Only will build development stage from our dockerfile
+      target: development
+    # Mount our host Directory to the docker container
+    # Mount (.) current directory to the docker container thomas/src/app
+    # reflect file changes from host to container
+    volumes:
+      - .:/thomas/src/app
+      - ./thomas/src/app/node_modules
+    # Run in Debug Mode: npm run start:debug --> Don't forget to start your vscode debugger!
+    # Run in dev Mode: npm run start:dev
+    command: npm run start:debug
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://user:password@postgres:5432/db
+      NODE_ENV: development
+      JWT_SECRET: knighthell
+      PORT: 3000
+    ports:
+      - 8080:3000
+      # debugging port
+      - 9229:9229

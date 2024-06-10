@@ -1,5 +1,11 @@
 import { ChatUser } from '@knighthell-boilerplate-idl-proto/chat/nestjs/chat-user';
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryColumn,
+} from 'typeorm';
 import { ChatParticipantEntity } from '../chat-participant/chat-participant.entity';
 
 @Entity('ChatUser')
@@ -13,8 +19,11 @@ export class ChatUserEntity implements ChatUser {
   @Column({ type: 'varchar', length: 255 })
   displayName: string;
 
-  @Column({ type: 'varchar', length: 255 })
-  photoUrl: string;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  photoUrl?: string | undefined;
+
+  @CreateDateColumn()
+  createdDateTimeUTC: Date | undefined;
 
   @OneToMany(() => ChatParticipantEntity, (participant) => participant.user)
   participants: ChatParticipantEntity[];

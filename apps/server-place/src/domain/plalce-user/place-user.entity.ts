@@ -1,5 +1,5 @@
 import { PlaceUser } from '@knighthell-boilerplate-idl-proto/place/nestjs/place-user';
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity('PlaceUser')
 export class PlaceUserEntity implements PlaceUser {
@@ -9,9 +9,12 @@ export class PlaceUserEntity implements PlaceUser {
   @Column('varchar', { length: 255 })
   email: string;
 
-  @Column('varchar', { length: 2048 })
-  photoURL: string;
-
   @Column('varchar', { length: 255 })
   displayName: string;
+
+  @CreateDateColumn()
+  createdDateTimeUTC: Date | undefined;
+
+  @Column('varchar', { length: 2048, nullable: true })
+  photoUrl?: string | undefined;
 }
