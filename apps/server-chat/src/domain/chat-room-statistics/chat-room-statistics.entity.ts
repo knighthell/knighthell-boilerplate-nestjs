@@ -10,7 +10,7 @@ export class ChatRoomStatisticsEntity implements ChatRoomStatistics {
   })
   id: string;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'integer', unsigned: true, default: 0 })
   participantCount: number;
 
   @OneToOne(() => ChatRoomEntity, (room) => room.statistics)
