@@ -19,7 +19,7 @@ export class ChatRoomDto implements ChatRoom {
   @ApiResponseProperty()
   @IsString()
   @Length(2, 50)
-  title?: string | undefined;
+  title: string;
 
   @ApiResponseProperty({ type: ChatRoomStatisticsDto })
   @Type(() => ChatRoomStatisticsDto)

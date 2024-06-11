@@ -41,7 +41,7 @@ export class ChatRoomEntity implements ChatRoom {
   deletedDateTimeUTC?: Date | undefined;
 
   @Column({ type: 'varchar', length: 255 })
-  title?: string | undefined;
+  title: string;
 
   @OneToOne(() => ChatRoomStatisticsEntity, (statistics) => statistics.room, {
     cascade: true,

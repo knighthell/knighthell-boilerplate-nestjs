@@ -6,6 +6,12 @@ import { ChatRoomUpdateModule } from './chat-room-update/chat-room-update.module
 import { ChatRoomDeleteModule } from './chat-room-delete/chat-room-delete.module';
 
 @Module({
-  imports: [ChatRoomCreateModule, ChatRoomReadOneModule, ChatRoomReadListModule, ChatRoomUpdateModule, ChatRoomDeleteModule]
+  imports: [
+    ChatRoomCreateModule,
+    ChatRoomReadOneModule,
+    ChatRoomReadListModule,
+    ChatRoomUpdateModule,
+    ChatRoomDeleteModule,
+  ],
 })
 export class ChatRoomModule {}
