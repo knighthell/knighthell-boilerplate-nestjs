@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ServerChatModule } from './server-chat.module';
-import { RedisIoAdapter } from './service/redis-io.adapter';
+import { RedisIoAdapter } from './redis-io.adapter';
 
 async function bootstrap() {
   const app = await NestFactory.create(ServerChatModule);

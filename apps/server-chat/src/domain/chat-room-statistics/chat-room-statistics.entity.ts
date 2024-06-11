@@ -1,7 +1,6 @@
 import { ChatRoomStatistics } from '@knighthell-boilerplate-idl-proto/chat/nestjs/chat-room-statistics';
-import { Column, OneToOne, PrimaryColumn } from 'typeorm';
+import { Column, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { ChatRoomEntity } from '../chat-room/chat-room.entity';
-import { JoinColumn } from 'typeorm/browser';
 
 export class ChatRoomStatisticsEntity implements ChatRoomStatistics {
   @PrimaryColumn('uuid', {

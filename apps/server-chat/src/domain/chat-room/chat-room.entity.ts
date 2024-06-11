@@ -8,10 +8,10 @@ import {
   OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { ChatUserEntity } from '../chat-user/chat-user.entity';
 import { ChatParticipantEntity } from '../chat-participant/chat-participant.entity';
-import { JoinColumn } from 'typeorm/browser';
 import { ChatRoomStatisticsEntity } from '../chat-room-statistics/chat-room-statistics.entity';
 
 @Entity('ChatRoom')
