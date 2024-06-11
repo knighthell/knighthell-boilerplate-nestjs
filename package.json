@@ -44,7 +44,12 @@
     "server:place:docker:down": "docker-compose -f .config/docker-compose/docker-compose.server-place.yaml down -v",
     "server:place:build:container:docker": "npm run export:env:service-version && docker build -f ./apps/server-place/Dockerfile -t server-place:$SERVICE_VERSION",
     "server:place:build:container:podman": "npm run export:env:service-version && podman build -f ./apps/server-place/Dockerfile -t server-place:$SERVICE_VERSION",
-    "server:place:deploy:gcp:run": "npm run service:place:build:container:docker && gcloud run deploy server:place:$SERVICE_VERSION"
+    "server:place:deploy:gcp:run": "npm run service:place:build:container:docker && gcloud run deploy server:place:$SERVICE_VERSION",
+    "server:chat:start:dev": "npm run start:dev server-chat",
+    "server:chat:start:debug": "npm run start:dev server-chat",
+    "server:chat:start:prod": "npm run build server-chat && node dist/apps/server-chat/main",
+    "server:chat:docker:up": "docker-compose -f apps/server-chat/docker-compose.local.yaml up -d",
+    "server:chat:docker:down": "docker-compose -f apps/server-chat/docker-compose.local.yaml down -v"
   },
   "dependencies": {
     "@fastify/cors": "^8.4.2",

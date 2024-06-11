@@ -1,30 +1,28 @@
 version: '3.8'
 
 services:
-  server-chat:
-    # image: thomas-oliver/nestjs-dockerized
-    build:
-      dockerfile: Dockerfile
-      context: .
-      # Only will build development stage from our dockerfile
-      target: development
-    # Mount our host Directory to the docker container
-    # Mount (.) current directory to the docker container thomas/src/app
-    # reflect file changes from host to container
-    volumes:
-      - .:/thomas/src/app
-      - ./thomas/src/app/node_modules
-    # Run in Debug Mode: npm run start:debug --> Don't forget to start your vscode debugger!
-    # Run in dev Mode: npm run start:dev
-    command: npm run start:debug
-    depends_on:
-      - postgres
-    environment:
-      DATABASE_URL: postgres://user:password@postgres:5432/db
-      NODE_ENV: development
-      JWT_SECRET: knighthell
-      PORT: 3000
+  server-chat-postgres:
+    container_name: server-chat-postgres
+    image: postgres:15.5
     ports:
-      - 8080:3000
-      # debugging port
-      - 9229:9229
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "admin" ]
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin1234
+      POSTGRES_DB: chat
+    command: postgres -c wal_level=logical
+  server-chat-redis:
+    container_name: server-chat-redis
+    image: redis:7.2.3-alpine
+    command: redis-server --port 6379
+    labels:
+      - "name=redis"
+      - "mode=standalone"
+    healthcheck:
+      test: [ "CMD", "redis-cli","ping" ]
+      timeout: 20s
+      retries: 10
+    ports:
+      - "6379:6379"
