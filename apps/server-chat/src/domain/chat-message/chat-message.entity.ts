@@ -12,10 +12,12 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
   JoinColumn,
+  Entity,
 } from 'typeorm';
 import { ChatUserEntity } from '../chat-user/chat-user.entity';
 import { ChatParticipantEntity } from '../chat-participant/chat-participant.entity';
 
+@Entity('ChatMessage')
 export class ChatMessageEntity implements ChatMessage {
   @PrimaryColumn('uuid', {
     default: () => 'uuid_generate_v7()',

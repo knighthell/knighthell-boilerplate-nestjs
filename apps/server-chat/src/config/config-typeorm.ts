@@ -20,11 +20,11 @@ configDotenv({ path: './.env.local' });
 
 const typeormConfig: DataSourceOptions = {
   type: 'postgres',
-  host: process.env.PLACE_DB_POSTGRES_HOST || 'localhost',
-  port: parseInt(process.env.PLACE_DB_POSTGRES_PORT, 10) || 11101,
-  username: process.env.PLACE_DB_POSTGRES_USERNAME || 'chat',
-  password: process.env.PLACE_DB_POSTGRES_PASSWORD || 'chat1234!!',
-  database: process.env.PLACE_DB_POSTGRES_DATABASE_NAME || 'chat',
+  host: process.env.CHAT_DB_POSTGRES_HOST || 'localhost',
+  port: parseInt(process.env.CHAT_DB_POSTGRES_PORT, 10) || 5432,
+  username: process.env.CHAT_DB_POSTGRES_USERNAME || 'chat',
+  password: process.env.CHAT_DB_POSTGRES_PASSWORD || 'chat1234!!',
+  database: process.env.CHAT_DB_POSTGRES_DATABASE_NAME || 'chat',
   entities: [
     ChatRoomEntity,
     ChatRoomStatisticsEntity,

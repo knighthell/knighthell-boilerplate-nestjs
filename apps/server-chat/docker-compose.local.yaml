@@ -3,16 +3,17 @@ version: '3.8'
 services:
   server-chat-postgres:
     container_name: server-chat-postgres
-    image: postgres:15.5
+    image: postgres:16.2
     ports:
       - "5432:5432"
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "admin" ]
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin1234
+      POSTGRES_USER: chat
+      POSTGRES_PASSWORD: chat1234!!
       POSTGRES_DB: chat
     command: postgres -c wal_level=logical
+#    platform: linux/amd64 # arm64로 할 경우 각종 extension의 so파일 들이 동작 안할 수 있음.'
   server-chat-redis:
     container_name: server-chat-redis
     image: redis:7.2.3-alpine

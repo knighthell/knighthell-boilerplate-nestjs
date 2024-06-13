@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  postgres-uuidv7:
+    image: postgres:16.2
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init-extensions.sh:/docker-entrypoint-initdb.d/init-extensions.sh
+    command: postgres -c wal_level=logical
+    platform: linux/amd64 # arm64로 할 경우 각종 extension의 so파일 들이 동작 안할 수 있음.

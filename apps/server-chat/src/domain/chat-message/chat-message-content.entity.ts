@@ -1,6 +1,7 @@
 import { ChatMessageContent } from '@knighthell-boilerplate-idl-proto/chat/nestjs/chat-message';
-import { Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity('ChatMessageContent')
 export class ChatMessageContentEntity implements ChatMessageContent {
   @PrimaryColumn('uuid', {
     default: () => 'uuid_generate_v7()',

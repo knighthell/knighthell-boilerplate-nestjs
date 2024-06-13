@@ -7,6 +7,13 @@ import { TypeOrmConfig } from './config/config-typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServiceConfig } from './config/config-service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import process from 'process';
+import { ChatRoomEntity } from './domain/chat-room/chat-room.entity';
+import { ChatRoomStatisticsEntity } from './domain/chat-room-statistics/chat-room-statistics.entity';
+import { ChatUserEntity } from './domain/chat-user/chat-user.entity';
+import { ChatParticipantEntity } from './domain/chat-participant/chat-participant.entity';
+import { ChatMessageEntity } from './domain/chat-message/chat-message.entity';
+import { ChatMessageContentEntity } from './domain/chat-message/chat-message-content.entity';
 
 @Module({
   imports: [
@@ -21,6 +28,23 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         configService.get('typeorm'),
       inject: [ConfigService],
     }),
+    // TypeOrmModule.forRoot({
+    //   type: 'postgres',
+    //   host: process.env.PLACE_DB_POSTGRES_HOST || 'localhost',
+    //   port: parseInt(process.env.PLACE_DB_POSTGRES_PORT, 10) || 5432,
+    //   username: process.env.PLACE_DB_POSTGRES_USERNAME || 'chat',
+    //   password: process.env.PLACE_DB_POSTGRES_PASSWORD || 'chat1234!!',
+    //   database: process.env.PLACE_DB_POSTGRES_DATABASE_NAME || 'chat',
+    //   entities: [
+    //     ChatRoomEntity,
+    //     ChatRoomStatisticsEntity,
+    //     ChatUserEntity,
+    //     ChatParticipantEntity,
+    //     ChatMessageEntity,
+    //     ChatMessageContentEntity,
+    //   ],
+    //   synchronize: true,
+    // }),
     ChatRoomModule,
     ChatParticipantModule,
     ChatMessageModule,

@@ -4,15 +4,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
-  JoinColumn,
 } from 'typeorm';
-import { ChatUser } from '@knighthell-boilerplate-idl-proto/chat/nestjs/chat-user';
-import { ChatRoom } from '@knighthell-boilerplate-idl-proto/chat/nestjs/chat-room';
 import { ChatMessageEntity } from '../chat-message/chat-message.entity';
 import { ChatUserEntity } from '../chat-user/chat-user.entity';
 import { ChatRoomEntity } from '../chat-room/chat-room.entity';
