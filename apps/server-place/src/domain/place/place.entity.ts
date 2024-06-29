@@ -13,6 +13,7 @@ import {
   DeleteDateColumn,
   Entity,
   Index,
+  ManyToOne,
   OneToOne,
   Point,
   PrimaryColumn,
@@ -44,19 +45,19 @@ export class PlaceEntity implements Place {
   @Index({ spatial: true })
   geom: Point;
 
-  @OneToOne(() => PlaceUserEntity)
+  @ManyToOne(() => PlaceUserEntity)
   createdBy: PlaceUserEntity | undefined;
 
   @CreateDateColumn()
   createdAt: Date | undefined;
 
-  @OneToOne(() => PlaceUserEntity)
+  @ManyToOne(() => PlaceUserEntity)
   updatedBy: PlaceUserEntity | undefined;
 
   @UpdateDateColumn()
   updatedAt: Date | undefined;
 
-  @OneToOne(() => PlaceUserEntity)
+  @ManyToOne(() => PlaceUserEntity)
   deletedBy: PlaceUserEntity | undefined;
 
   @DeleteDateColumn()

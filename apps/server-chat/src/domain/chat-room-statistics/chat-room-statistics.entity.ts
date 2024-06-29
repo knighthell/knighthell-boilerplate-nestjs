@@ -5,7 +5,6 @@ import { ChatRoomEntity } from '../chat-room/chat-room.entity';
 @Entity('ChatRoomStatistics')
 export class ChatRoomStatisticsEntity implements ChatRoomStatistics {
   @PrimaryColumn('uuid', {
-    default: () => 'uuid_generate_v7()',
     comment: '채팅방 통계 고유 Id',
   })
   id: string;

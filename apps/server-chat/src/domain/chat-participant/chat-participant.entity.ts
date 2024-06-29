@@ -18,24 +18,23 @@ import { ChatRoomEntity } from '../chat-room/chat-room.entity';
 @Entity('ChatParticipant')
 export class ChatParticipantEntity implements ChatParticipant {
   @PrimaryColumn('uuid', {
-    default: () => 'uuid_generate_v7()',
     comment: '참가자 고유 Id',
   })
   id: string;
 
-  @OneToOne(() => ChatUserEntity)
+  @ManyToOne(() => ChatUserEntity)
   @JoinColumn()
   createdBy: ChatUserEntity | undefined;
   @CreateDateColumn()
   createdDateTimeUTC: Date | undefined;
 
-  @OneToOne(() => ChatUserEntity)
+  @ManyToOne(() => ChatUserEntity)
   @JoinColumn()
   updatedBy?: ChatUserEntity | undefined;
   @UpdateDateColumn()
   updatedDateTimeUTC?: Date | undefined;
 
-  @OneToOne(() => ChatUserEntity)
+  @ManyToOne(() => ChatUserEntity)
   @JoinColumn()
   deletedBy?: ChatUserEntity | undefined;
   @DeleteDateColumn()

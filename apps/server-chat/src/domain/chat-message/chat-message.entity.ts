@@ -20,24 +20,23 @@ import { ChatParticipantEntity } from '../chat-participant/chat-participant.enti
 @Entity('ChatMessage')
 export class ChatMessageEntity implements ChatMessage {
   @PrimaryColumn('uuid', {
-    default: () => 'uuid_generate_v7()',
     comment: '채팅 메세지 고유 Id',
   })
   id: string;
 
-  @OneToOne(() => ChatUserEntity)
+  @ManyToOne(() => ChatUserEntity)
   @JoinColumn()
   createdBy: ChatUserEntity | undefined;
   @CreateDateColumn()
   createdDateTimeUTC: Date | undefined;
 
-  @OneToOne(() => ChatUserEntity)
+  @ManyToOne(() => ChatUserEntity)
   @JoinColumn()
   updatedBy?: ChatUserEntity | undefined;
   @UpdateDateColumn()
   updatedDateTimeUTC?: Date | undefined;
 
-  @OneToOne(() => ChatUserEntity)
+  @ManyToOne(() => ChatUserEntity)
   @JoinColumn()
   deletedBy?: ChatUserEntity | undefined;
   @DeleteDateColumn()
